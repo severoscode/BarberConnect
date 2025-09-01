@@ -68,6 +68,11 @@ export default function TimeSelection({
     return { morning, afternoon };
   };
 
+  const formatTimeDisplay = (time: string) => {
+    const [hours, minutes] = time.split(':');
+    return `${hours}h${minutes}`;
+  };
+
   const { morning, afternoon } = availableSlots ? organizeSlotsByPeriod(availableSlots) : { morning: [], afternoon: [] };
 
   return (
@@ -126,14 +131,14 @@ export default function TimeSelection({
                 <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {morning.map((time) => (
                     <button
-                      key={time}
-                      className={`time-slot p-3 border border-border rounded-md text-center transition-colors ${
+                      key={`morning-${time}`}
+                      className={`time-slot p-3 border border-border rounded-md text-center transition-colors hover:bg-muted ${
                         selectedTime === time ? 'selected bg-primary text-primary-foreground' : ''
                       }`}
                       onClick={() => handleTimeSelect(time)}
                       data-testid={`time-${time}`}
                     >
-                      {time}
+                      {formatTimeDisplay(time)}
                     </button>
                   ))}
                 </div>
@@ -149,14 +154,14 @@ export default function TimeSelection({
                 <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {afternoon.map((time) => (
                     <button
-                      key={time}
-                      className={`time-slot p-3 border border-border rounded-md text-center transition-colors ${
+                      key={`afternoon-${time}`}
+                      className={`time-slot p-3 border border-border rounded-md text-center transition-colors hover:bg-muted ${
                         selectedTime === time ? 'selected bg-primary text-primary-foreground' : ''
                       }`}
                       onClick={() => handleTimeSelect(time)}
                       data-testid={`time-${time}`}
                     >
-                      {time}
+                      {formatTimeDisplay(time)}
                     </button>
                   ))}
                 </div>
@@ -177,7 +182,7 @@ export default function TimeSelection({
           </Button>
           {selectedTime && (
             <span className="text-sm text-muted-foreground flex items-center">
-              Horário selecionado: <strong className="ml-1">{selectedTime}</strong>
+              Horário selecionado: <strong className="ml-1">{formatTimeDisplay(selectedTime)}</strong>
             </span>
           )}
         </div>

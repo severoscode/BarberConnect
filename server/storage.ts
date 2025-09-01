@@ -304,60 +304,87 @@ export class DatabaseStorage implements IStorage {
       return [];
     }
 
-    const professionalSchedules = await this.getProfessionalSchedules(professionalId!);
-    const professionalBreaks = await this.getProfessionalBreaks(professionalId!, date, date);
-    const existingAppointments = await this.getAppointmentsByDateRange(date, date, professionalId!);
+    // If no professional specified, get all professionals who offer this service
+    let professionalsToCheck: string[] = [];
+    if (professionalId) {
+      professionalsToCheck = [professionalId];
+    } else {
+      const allProfessionals = await this.getProfessionals();
+      const professionalServices = await Promise.all(
+        allProfessionals.map(p => this.getProfessionalServices(p.id))
+      );
+      professionalsToCheck = allProfessionals
+        .filter((p, index) => 
+          professionalServices[index].some(ps => ps.serviceId === serviceId && ps.isEnabled)
+        )
+        .map(p => p.id);
+    }
 
-    const availableSlots: string[] = [];
+    const allAvailableSlots = new Set<string>();
     const serviceDurationMinutes = service.durationMinutes;
+    const targetDayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
 
-    for (const schedule of professionalSchedules) {
-      const scheduleStartDate = new Date(date);
-      const [startHour, startMinute] = schedule.startTime.split(':').map(Number);
-      scheduleStartDate.setHours(startHour, startMinute, 0, 0);
+    for (const profId of professionalsToCheck) {
+      const professionalSchedules = await this.getProfessionalSchedules(profId);
+      const professionalBreaks = await this.getProfessionalBreaks(profId, date, date);
+      const existingAppointments = await this.getAppointmentsByDateRange(date, date, profId);
 
-      const scheduleEndDate = new Date(date);
-      const [endHour, endMinute] = schedule.endTime.split(':').map(Number);
-      scheduleEndDate.setHours(endHour, endMinute, 0, 0);
+      // Filter schedules for the target day
+      const daySchedules = professionalSchedules.filter(schedule => 
+        schedule.dayOfWeek === targetDayOfWeek && schedule.isActive
+      );
 
-      let currentSlotStart = new Date(scheduleStartDate);
+      for (const schedule of daySchedules) {
+        const scheduleStartDate = new Date(date);
+        const [startHour, startMinute] = schedule.startTime.split(':').map(Number);
+        scheduleStartDate.setHours(startHour, startMinute, 0, 0);
 
-      while (currentSlotStart < scheduleEndDate) {
-        const currentSlotEnd = new Date(currentSlotStart.getTime() + serviceDurationMinutes * 60000);
+        const scheduleEndDate = new Date(date);
+        const [endHour, endMinute] = schedule.endTime.split(':').map(Number);
+        scheduleEndDate.setHours(endHour, endMinute, 0, 0);
 
-        // Check if the slot is within the schedule and not overlapping with breaks or appointments
-        const isBreak = professionalBreaks.some(breakTime => {
-          const breakStartTime = new Date(date);
-          const [breakStartHour, breakStartMinute] = breakTime.startTime.split(':').map(Number);
-          breakStartTime.setHours(breakStartHour, breakStartMinute, 0, 0);
+        let currentSlotStart = new Date(scheduleStartDate);
 
-          const breakEndTime = new Date(date);
-          const [breakEndHour, breakEndMinute] = breakTime.endTime.split(':').map(Number);
-          breakEndTime.setHours(breakEndHour, breakEndMinute, 0, 0);
+        while (currentSlotStart < scheduleEndDate) {
+          const currentSlotEnd = new Date(currentSlotStart.getTime() + serviceDurationMinutes * 60000);
 
-          return (currentSlotStart >= breakStartTime && currentSlotStart < breakEndTime) ||
-                 (currentSlotEnd > breakStartTime && currentSlotEnd <= breakEndTime) ||
-                 (currentSlotStart < breakStartTime && currentSlotEnd > breakEndTime);
-        });
+          // Check if the slot is within the schedule and not overlapping with breaks or appointments
+          const isBreak = professionalBreaks.some(breakTime => {
+            const breakStartTime = new Date(date);
+            const [breakStartHour, breakStartMinute] = breakTime.startTime.split(':').map(Number);
+            breakStartTime.setHours(breakStartHour, breakStartMinute, 0, 0);
 
-        const isAppointment = existingAppointments.some(appointment => {
-          const appointmentStartTime = new Date(appointment.startTime);
-          const appointmentEndTime = new Date(appointment.endTime);
+            const breakEndTime = new Date(date);
+            const [breakEndHour, breakEndMinute] = breakTime.endTime.split(':').map(Number);
+            breakEndTime.setHours(breakEndHour, breakEndMinute, 0, 0);
 
-          return (currentSlotStart >= appointmentStartTime && currentSlotStart < appointmentEndTime) ||
-                 (currentSlotEnd > appointmentStartTime && currentSlotEnd <= appointmentEndTime) ||
-                 (currentSlotStart < appointmentStartTime && currentSlotEnd > appointmentEndTime);
-        });
+            return (currentSlotStart >= breakStartTime && currentSlotStart < breakEndTime) ||
+                   (currentSlotEnd > breakStartTime && currentSlotEnd <= breakEndTime) ||
+                   (currentSlotStart < breakStartTime && currentSlotEnd > breakEndTime);
+          });
 
-        if (!isBreak && !isAppointment && currentSlotEnd <= scheduleEndDate) {
-          availableSlots.push(currentSlotStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          const isAppointment = existingAppointments.some(appointment => {
+            const appointmentStartTime = new Date(appointment.startTime);
+            const appointmentEndTime = new Date(appointment.endTime);
+
+            return (currentSlotStart >= appointmentStartTime && currentSlotStart < appointmentEndTime) ||
+                   (currentSlotEnd > appointmentStartTime && currentSlotEnd <= appointmentEndTime) ||
+                   (currentSlotStart < appointmentStartTime && currentSlotEnd > appointmentEndTime);
+          });
+
+          if (!isBreak && !isAppointment && currentSlotEnd <= scheduleEndDate) {
+            // Format time in HH:mm format (24h)
+            const timeString = currentSlotStart.toTimeString().slice(0, 5);
+            allAvailableSlots.add(timeString);
+          }
+
+          currentSlotStart = new Date(currentSlotStart.getTime() + 30 * 60000); // Increment by 30 minutes
         }
-
-        currentSlotStart = new Date(currentSlotStart.getTime() + 30 * 60000); // Increment by 30 minutes
       }
     }
 
-    return availableSlots;
+    // Convert Set to Array and sort
+    return Array.from(allAvailableSlots).sort();
   }
 }
 
