@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Scissors, Clock, DollarSign } from "lucide-react";
+import { Scissors, Clock } from "lucide-react";
 import type { Service } from "@shared/schema";
 
 interface ServiceSelectionProps {
@@ -102,8 +102,7 @@ export default function ServiceSelection({ onServiceSelect }: ServiceSelectionPr
                 <p className="text-sm text-muted-foreground mb-3">{service.description}</p>
               )}
               <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold flex items-center">
-                  <DollarSign className="h-4 w-4 mr-1" />
+                <span className="text-lg font-semibold">
                   R$ {parseFloat(service.price).toFixed(2)}
                 </span>
                 <button className="text-sm text-accent hover:text-accent/80">

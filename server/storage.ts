@@ -228,22 +228,41 @@ export class DatabaseStorage implements IStorage {
       : eq(appointments.professionalId, userId);
 
     const result = await db
-      .select()
+      .select({
+        appointment: appointments,
+        client: users,
+        professional: professionals,
+        professionalUser: {
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          email: users.email,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt,
+        },
+        service: services,
+      })
       .from(appointments)
       .innerJoin(users, eq(appointments.clientId, users.id))
-      .innerJoin(professionals, eq(appointments.professionalId, professionals.id))
+      .leftJoin(professionals, eq(appointments.professionalId, professionals.id))
+      .leftJoin(
+        { professionalUser: users }, 
+        eq(professionals.userId, users.id)
+      )
       .innerJoin(services, eq(appointments.serviceId, services.id))
       .where(whereCondition)
       .orderBy(desc(appointments.startTime));
 
     return result.map((row) => ({
-      ...row.appointments,
-      client: row.users,
-      professional: {
-        ...row.professionals,
-        user: row.users,
-      },
-      service: row.services,
+      ...row.appointment,
+      client: row.client,
+      professional: row.professional ? {
+        ...row.professional,
+        user: row.professionalUser,
+      } : null as any,
+      service: row.service,
     }));
   }
 

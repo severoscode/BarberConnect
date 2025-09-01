@@ -134,7 +134,14 @@ export default function ProfessionalSelection({
                       {professional.user.firstName} {professional.user.lastName}
                     </h3>
                     <p className="text-muted-foreground">
-                      {professional.specialties || "Especialista em diversos serviços"}
+                      {professional.specialties 
+                        ? professional.specialties
+                            .replace(/[{}]/g, '') // Remove curly braces
+                            .split(',')
+                            .map(s => s.trim().replace(/"/g, '')) // Remove quotes and trim
+                            .join(', ')
+                        : "Especialista em diversos serviços"
+                      }
                     </p>
                     <div className="flex items-center space-x-2 mt-1">
                       {professional.rating && parseFloat(professional.rating) > 0 ? (

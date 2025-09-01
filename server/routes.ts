@@ -133,6 +133,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           appointments = [];
         }
       } else {
+        // For clients, use their user ID directly
         appointments = await storage.getAppointments(userId, 'client');
       }
 

@@ -73,6 +73,26 @@ export default function TimeSelection({
     return `${hours}h${minutes}`;
   };
 
+  const formatPrice = (price: number) => {
+    return `R$ ${price.toFixed(2).replace('.', ',')}`;
+  };
+
+  const formatSpecialties = (specialties: string | string[]) => {
+    if (typeof specialties === 'string') {
+      try {
+        const parsedSpecialties = JSON.parse(specialties);
+        if (Array.isArray(parsedSpecialties)) {
+          return parsedSpecialties.join(', ');
+        }
+      } catch (e) {
+        return specialties;
+      }
+    } else if (Array.isArray(specialties)) {
+      return specialties.join(', ');
+    }
+    return 'N/A';
+  };
+
   const { morning, afternoon } = availableSlots ? organizeSlotsByPeriod(availableSlots) : { morning: [], afternoon: [] };
 
   return (
@@ -89,8 +109,13 @@ export default function TimeSelection({
                 {format(date, "dd 'de' MMMM, yyyy", { locale: ptBR })} - {format(date, "EEEE", { locale: ptBR })}
               </p>
               <p className="text-sm text-muted-foreground">
-                {service.name} • {professionalName} • {service.durationMinutes} min
+                {service.name} • {professionalName} • {service.durationMinutes} min • {formatPrice(service.price)}
               </p>
+              {professional !== "any" && professional.user.specialties && (
+                <p className="text-sm text-muted-foreground">
+                  Especialidades: {formatSpecialties(professional.user.specialties)}
+                </p>
+              )}
             </div>
           </div>
         </div>
