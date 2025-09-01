@@ -30,31 +30,32 @@ export interface IStorage {
   // User operations
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
-  
+
   // Service operations
   getServices(): Promise<Service[]>;
+  getService(serviceId: string): Promise<Service | undefined>;
   createService(service: InsertService): Promise<Service>;
   updateService(id: string, service: Partial<InsertService>): Promise<Service>;
   deleteService(id: string): Promise<void>;
-  
+
   // Professional operations
   getProfessionals(): Promise<ProfessionalWithUser[]>;
   getProfessionalByUserId(userId: string): Promise<Professional | undefined>;
   createProfessional(professional: InsertProfessional): Promise<Professional>;
   updateProfessional(id: string, professional: Partial<InsertProfessional>): Promise<Professional>;
-  
+
   // Professional services
   getProfessionalServices(professionalId: string): Promise<(ProfessionalService & { service: Service })[]>;
   setProfessionalService(professionalService: InsertProfessionalService): Promise<ProfessionalService>;
-  
+
   // Professional schedules
   getProfessionalSchedules(professionalId: string): Promise<ProfessionalSchedule[]>;
   setProfessionalSchedule(schedule: InsertProfessionalSchedule): Promise<ProfessionalSchedule>;
-  
+
   // Professional breaks
   getProfessionalBreaks(professionalId: string, startDate: Date, endDate: Date): Promise<ProfessionalBreak[]>;
   createProfessionalBreak(breakData: InsertProfessionalBreak): Promise<ProfessionalBreak>;
-  
+
   // Appointment operations
   getAppointments(userId: string, userType: 'client' | 'professional'): Promise<AppointmentWithDetails[]>;
   getAppointmentsByDateRange(startDate: Date, endDate: Date, professionalId?: string): Promise<AppointmentWithDetails[]>;
@@ -89,6 +90,15 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(services).where(eq(services.isActive, true)).orderBy(asc(services.name));
   }
 
+  async getService(serviceId: string): Promise<Service | undefined> {
+    const result = await db
+      .select()
+      .from(services)
+      .where(eq(services.id, serviceId))
+      .limit(1);
+    return result[0];
+  }
+
   async createService(service: InsertService): Promise<Service> {
     const [newService] = await db.insert(services).values(service).returning();
     return newService;
@@ -107,14 +117,14 @@ export class DatabaseStorage implements IStorage {
     await db.update(services).set({ isActive: false }).where(eq(services.id, id));
   }
 
-  async getProfessionals(): Promise<ProfessionalWithUser[]> {
+  async getProfessionals(): Promise<ProfessionalWithUser[]>{
     const result = await db
       .select()
       .from(professionals)
       .innerJoin(users, eq(professionals.userId, users.id))
       .where(eq(professionals.isActive, true))
       .orderBy(desc(professionals.rating));
-    
+
     return result.map((row) => ({
       ...row.professionals,
       user: row.users,
@@ -149,7 +159,7 @@ export class DatabaseStorage implements IStorage {
       .from(professionalServices)
       .innerJoin(services, eq(professionalServices.serviceId, services.id))
       .where(eq(professionalServices.professionalId, professionalId));
-    
+
     return result.map((row) => ({
       ...row.professional_services,
       service: row.services,
@@ -289,25 +299,65 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAvailableSlots(date: Date, serviceId: string, professionalId?: string): Promise<string[]> {
-    // This is a complex algorithm that would check:
-    // 1. Professional schedules for the day
-    // 2. Existing appointments
-    // 3. Professional breaks
-    // 4. Service duration
-    
-    // For now, return some sample slots - in production this would be a comprehensive algorithm
-    const slots = [];
-    const startHour = 9;
-    const endHour = 18;
-    
-    for (let hour = startHour; hour < endHour; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-        slots.push(timeString);
+    const service = await this.getService(serviceId);
+    if (!service) {
+      return [];
+    }
+
+    const professionalSchedules = await this.getProfessionalSchedules(professionalId!);
+    const professionalBreaks = await this.getProfessionalBreaks(professionalId!, date, date);
+    const existingAppointments = await this.getAppointmentsByDateRange(date, date, professionalId!);
+
+    const availableSlots: string[] = [];
+    const serviceDurationMinutes = service.durationMinutes;
+
+    for (const schedule of professionalSchedules) {
+      const scheduleStartDate = new Date(date);
+      const [startHour, startMinute] = schedule.startTime.split(':').map(Number);
+      scheduleStartDate.setHours(startHour, startMinute, 0, 0);
+
+      const scheduleEndDate = new Date(date);
+      const [endHour, endMinute] = schedule.endTime.split(':').map(Number);
+      scheduleEndDate.setHours(endHour, endMinute, 0, 0);
+
+      let currentSlotStart = new Date(scheduleStartDate);
+
+      while (currentSlotStart < scheduleEndDate) {
+        const currentSlotEnd = new Date(currentSlotStart.getTime() + serviceDurationMinutes * 60000);
+
+        // Check if the slot is within the schedule and not overlapping with breaks or appointments
+        const isBreak = professionalBreaks.some(breakTime => {
+          const breakStartTime = new Date(date);
+          const [breakStartHour, breakStartMinute] = breakTime.startTime.split(':').map(Number);
+          breakStartTime.setHours(breakStartHour, breakStartMinute, 0, 0);
+
+          const breakEndTime = new Date(date);
+          const [breakEndHour, breakEndMinute] = breakTime.endTime.split(':').map(Number);
+          breakEndTime.setHours(breakEndHour, breakEndMinute, 0, 0);
+
+          return (currentSlotStart >= breakStartTime && currentSlotStart < breakEndTime) ||
+                 (currentSlotEnd > breakStartTime && currentSlotEnd <= breakEndTime) ||
+                 (currentSlotStart < breakStartTime && currentSlotEnd > breakEndTime);
+        });
+
+        const isAppointment = existingAppointments.some(appointment => {
+          const appointmentStartTime = new Date(appointment.startTime);
+          const appointmentEndTime = new Date(appointment.endTime);
+
+          return (currentSlotStart >= appointmentStartTime && currentSlotStart < appointmentEndTime) ||
+                 (currentSlotEnd > appointmentStartTime && currentSlotEnd <= appointmentEndTime) ||
+                 (currentSlotStart < appointmentStartTime && currentSlotEnd > appointmentEndTime);
+        });
+
+        if (!isBreak && !isAppointment && currentSlotEnd <= scheduleEndDate) {
+          availableSlots.push(currentSlotStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        }
+
+        currentSlotStart = new Date(currentSlotStart.getTime() + 30 * 60000); // Increment by 30 minutes
       }
     }
-    
-    return slots;
+
+    return availableSlots;
   }
 }
 

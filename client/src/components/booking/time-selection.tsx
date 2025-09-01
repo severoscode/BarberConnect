@@ -27,12 +27,21 @@ export default function TimeSelection({
 
   const professionalId = professional === "any" ? undefined : professional.id;
   
-  const { data: availableSlots, isLoading } = useQuery<string[]>({
-    queryKey: ["/api/available-slots", {
-      date: date.toISOString().split('T')[0],
-      serviceId: service.id,
-      professionalId
-    }],
+  const { data: availableSlots, isLoading, error } = useQuery<string[]>({
+    queryKey: ["/api/available-slots", date.toISOString().split('T')[0], service.id, professionalId],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        date: date.toISOString().split('T')[0],
+        serviceId: service.id,
+        ...(professionalId && { professionalId })
+      });
+      
+      const response = await fetch(`/api/available-slots?${params}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch available slots');
+      }
+      return response.json();
+    },
     enabled: !!date && !!service.id,
   });
 
@@ -99,6 +108,12 @@ export default function TimeSelection({
                 ))}
               </div>
             </div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-8 text-destructive">
+            <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Erro ao carregar horários disponíveis.</p>
+            <p className="text-sm mt-2">Tente novamente mais tarde.</p>
           </div>
         ) : availableSlots && availableSlots.length > 0 ? (
           <div className="space-y-6">
