@@ -228,7 +228,22 @@ export class DatabaseStorage implements IStorage {
       : eq(appointments.professionalId, userId);
 
     const result = await db
-      .select()
+      .select({
+        appointment: appointments,
+        client: users,
+        professional: professionals,
+        service: services,
+        professionalUser: { 
+          id: users.id,
+          email: users.email,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt
+        }
+      })
       .from(appointments)
       .innerJoin(users, eq(appointments.clientId, users.id))
       .leftJoin(professionals, eq(appointments.professionalId, professionals.id))
@@ -241,13 +256,13 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(appointments.startTime));
 
     return result.map((row) => ({
-      ...row.appointments,
-      client: row.users,
-      professional: row.professionals ? {
-        ...row.professionals,
+      ...row.appointment,
+      client: row.client,
+      professional: row.professional ? {
+        ...row.professional,
         user: row.professionalUser,
       } : null as any,
-      service: row.services,
+      service: row.service,
     }));
   }
 
@@ -265,7 +280,22 @@ export class DatabaseStorage implements IStorage {
     }
 
     const result = await db
-      .select()
+      .select({
+        appointment: appointments,
+        client: users,
+        professional: professionals,
+        service: services,
+        professionalUser: { 
+          id: users.id,
+          email: users.email,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          profileImageUrl: users.profileImageUrl,
+          userType: users.userType,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt
+        }
+      })
       .from(appointments)
       .innerJoin(users, eq(appointments.clientId, users.id))
       .leftJoin(professionals, eq(appointments.professionalId, professionals.id))
@@ -278,13 +308,13 @@ export class DatabaseStorage implements IStorage {
       .orderBy(asc(appointments.startTime));
 
     return result.map((row) => ({
-      ...row.appointments,
-      client: row.users,
-      professional: row.professionals ? {
-        ...row.professionals,
+      ...row.appointment,
+      client: row.client,
+      professional: row.professional ? {
+        ...row.professional,
         user: row.professionalUser,
       } : null as any,
-      service: row.services,
+      service: row.service,
     }));
   }
 
