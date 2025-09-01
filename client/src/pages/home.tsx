@@ -5,6 +5,7 @@ import { isUnauthorizedError } from "@/lib/authUtils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/header";
+import RecentAppointments from "@/components/recent-appointments";
 import { Calendar, Clock, User, Settings } from "lucide-react";
 import { Link } from "wouter";
 
@@ -82,17 +83,19 @@ export default function Home() {
             )}
 
             <Card className="hover:shadow-lg transition-shadow cursor-pointer" data-testid="card-appointments">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="font-semibold mb-2">
-                  {isBarber ? "Minha Agenda" : "Meus Agendamentos"}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {isBarber ? "Visualize sua agenda" : "Veja seus agendamentos"}
-                </p>
-              </CardContent>
+              <Link href="/appointments">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Clock className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <h3 className="font-semibold mb-2">
+                    {isBarber ? "Minha Agenda" : "Meus Agendamentos"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {isBarber ? "Visualize sua agenda" : "Veja seus agendamentos"}
+                  </p>
+                </CardContent>
+              </Link>
             </Card>
 
             {isBarber && (
@@ -133,19 +136,7 @@ export default function Home() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="text-center py-8 text-muted-foreground" data-testid="text-no-appointments">
-                    <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Nenhum agendamento encontrado</p>
-                    {!isBarber && (
-                      <Button className="mt-4" asChild>
-                        <Link href="/booking" data-testid="button-first-booking">
-                          Fazer Primeiro Agendamento
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </div>
+                <RecentAppointments />
               </CardContent>
             </Card>
 

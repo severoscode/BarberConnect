@@ -8,6 +8,7 @@ import NotFound from "@/pages/not-found";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import Booking from "@/pages/booking";
+import Appointments from "@/pages/appointments";
 import BarberDashboard from "@/pages/barber-dashboard";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
         <>
           <Route path="/" component={Home} />
           <Route path="/booking" component={Booking} />
+          <Route path="/appointments" component={Appointments} />
           <Route path="/dashboard" component={BarberDashboard} />
         </>
       )}
