@@ -73,8 +73,9 @@ export default function TimeSelection({
     return `${hours}h${minutes}`;
   };
 
-  const formatPrice = (price: number) => {
-    return `R$ ${price.toFixed(2).replace('.', ',')}`;
+  const formatPrice = (price: string | number) => {
+    const numericPrice = typeof price === 'string' ? parseFloat(price) : price;
+    return `R$ ${numericPrice.toFixed(2).replace('.', ',')}`;
   };
 
   const formatSpecialties = (specialties: string | string[]) => {
