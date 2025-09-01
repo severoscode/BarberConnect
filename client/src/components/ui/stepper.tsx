@@ -13,39 +13,53 @@ interface StepperProps {
 
 export default function Stepper({ steps, currentStep, className }: StepperProps) {
   return (
-    <div className={cn("mb-8", className)}>
-      <div className="flex items-center justify-center space-x-4 mb-6">
+    <div style={{ marginBottom: '3.2rem' }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1.6rem',
+        marginBottom: '2.4rem'
+      }}>
         {steps.map((step, index) => (
-          <div key={step.id} className="flex items-center">
-            <div className="flex items-center">
+          <div key={step.id} style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <div 
-                className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
-                  currentStep >= step.id 
-                    ? "bg-primary text-primary-foreground" 
-                    : "bg-muted text-muted-foreground"
-                )}
+                style={{
+                  width: '3.2rem',
+                  height: '3.2rem',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.4rem',
+                  fontWeight: '500',
+                  backgroundColor: currentStep >= step.id ? 'var(--primary)' : 'var(--secondary)',
+                  color: currentStep >= step.id ? 'var(--primary-foreground)' : 'var(--secondary-foreground)'
+                }}
                 data-testid={`step-${step.id}`}
               >
                 {step.id}
               </div>
               <span 
-                className={cn(
-                  "ml-2 text-sm font-medium",
-                  currentStep >= step.id ? "text-foreground" : "text-muted-foreground"
-                )}
+                style={{
+                  marginLeft: '0.8rem',
+                  fontSize: '1.4rem',
+                  fontWeight: '500',
+                  color: currentStep >= step.id ? 'var(--foreground)' : 'var(--secondary)'
+                }}
               >
                 {step.label}
               </span>
             </div>
             {index < steps.length - 1 && (
               <div 
-                className={cn(
-                  "w-16 h-0.5 mx-4",
-                  currentStep > step.id 
-                    ? "bg-accent" 
-                    : "bg-border"
-                )}
+                className={currentStep > step.id ? "stepper-line completed" : "stepper-line"}
+                style={{
+                  width: '6.4rem',
+                  height: '0.2rem',
+                  margin: '0 1.6rem'
+                }}
               />
             )}
           </div>

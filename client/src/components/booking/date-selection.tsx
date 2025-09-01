@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { format, addDays, startOfDay, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -62,109 +60,212 @@ export default function DateSelection({
     : `${professional.user.firstName} ${professional.user.lastName}`;
 
   return (
-    <Card>
-      <CardContent className="p-6">
-        <h2 className="text-2xl font-semibold mb-6">Escolha a data</h2>
-        
-        {/* Selected service and professional info */}
-        <div className="bg-muted/50 p-4 rounded-lg mb-6">
-          <div className="flex items-center space-x-4">
-            <CalendarIcon className="text-accent h-5 w-5" />
-            <div>
-              <p className="font-medium">{service.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {professionalName} • {service.durationMinutes} min • R$ {parseFloat(service.price).toFixed(2)}
-              </p>
-            </div>
+    <div style={{
+      backgroundColor: 'var(--card)',
+      border: '1px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      padding: '2.4rem'
+    }}>
+      <h2 style={{
+        fontSize: '2.4rem',
+        fontWeight: '600',
+        marginBottom: '2.4rem',
+        color: 'var(--foreground)'
+      }}>Escolha a data</h2>
+      
+      {/* Selected service and professional info */}
+      <div style={{
+        backgroundColor: 'rgba(153, 153, 153, 0.1)',
+        padding: '1.6rem',
+        borderRadius: 'var(--radius)',
+        marginBottom: '2.4rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1.6rem'
+        }}>
+          <CalendarIcon style={{
+            color: 'var(--gold)',
+            height: '2rem',
+            width: '2rem'
+          }} />
+          <div>
+            <p style={{
+              fontWeight: '500',
+              color: 'var(--foreground)'
+            }}>{service.name}</p>
+            <p style={{
+              fontSize: '1.4rem',
+              color: 'var(--secondary)'
+            }}>
+              {professionalName} • {service.durationMinutes} min • R$ {parseFloat(service.price).toFixed(2)}
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Calendar */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium">
-                {format(viewDate, "MMMM yyyy", { locale: ptBR })}
-              </h3>
-              <div className="flex space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}
-                  data-testid="button-prev-month"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
-                  data-testid="button-next-month"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+        gap: '2.4rem'
+      }}>
+        {/* Calendar */}
+        <div>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '1.6rem'
+          }}>
+            <h3 style={{
+              fontSize: '1.8rem',
+              fontWeight: '500',
+              color: 'var(--foreground)'
+            }}>
+              {format(viewDate, "MMMM yyyy", { locale: ptBR })}
+            </h3>
+            <div style={{
+              display: 'flex',
+              gap: '0.8rem'
+            }}>
+              <button
+                className="my-button"
+                style={{
+                  padding: '0.4rem 0.8rem',
+                  fontSize: '1.2rem',
+                  backgroundColor: 'transparent',
+                  color: 'var(--foreground)',
+                  borderColor: 'var(--border)'
+                }}
+                onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1))}
+                data-testid="button-prev-month"
+              >
+                <ChevronLeft style={{ height: '1.6rem', width: '1.6rem' }} />
+              </button>
+              <button
+                className="my-button"
+                style={{
+                  padding: '0.4rem 0.8rem',
+                  fontSize: '1.2rem',
+                  backgroundColor: 'transparent',
+                  color: 'var(--foreground)',
+                  borderColor: 'var(--border)'
+                }}
+                onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1))}
+                data-testid="button-next-month"
+              >
+                <ChevronRight style={{ height: '1.6rem', width: '1.6rem' }} />
+              </button>
             </div>
-            
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={handleDateSelect}
-              disabled={isDateDisabled}
-              locale={ptBR}
-              month={viewDate}
-              onMonthChange={setViewDate}
-              className="rounded-md border"
-              data-testid="calendar-date-selection"
-            />
           </div>
           
-          {/* Available times preview */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">Horários disponíveis</h3>
-            {selectedDate ? (
-              <div className="space-y-2">
-                <div className="text-sm text-muted-foreground mb-3">
-                  {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: ptBR })}
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {/* Sample available times */}
-                  {[
-                    "09:00", "09:30", "10:00", "10:30", "11:00", "14:00",
-                    "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
-                  ].map((time) => (
-                    <div
-                      key={time}
-                      className="text-center p-2 border border-border rounded-md text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer transition-colors"
-                      data-testid={`time-preview-${time}`}
-                    >
-                      {time}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                <CalendarIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Selecione uma data para ver os horários disponíveis</p>
-              </div>
-            )}
-          </div>
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={handleDateSelect}
+            disabled={isDateDisabled}
+            locale={ptBR}
+            month={viewDate}
+            onMonthChange={setViewDate}
+            style={{
+              borderRadius: 'var(--radius)',
+              border: '1px solid var(--border)'
+            }}
+            data-testid="calendar-date-selection"
+          />
         </div>
+        
+        {/* Available times preview */}
+        <div>
+          <h3 style={{
+            fontSize: '1.8rem',
+            fontWeight: '500',
+            marginBottom: '1.6rem',
+            color: 'var(--foreground)'
+          }}>Horários disponíveis</h3>
+          {selectedDate ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+              <div style={{
+                fontSize: '1.4rem',
+                color: 'var(--secondary)',
+                marginBottom: '1.2rem'
+              }}>
+                {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: ptBR })}
+              </div>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '0.8rem'
+              }}>
+                {/* Sample available times */}
+                {[
+                  "09:00", "09:30", "10:00", "10:30", "11:00", "14:00",
+                  "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
+                ].map((time) => (
+                  <div
+                    key={time}
+                    className="time-slot"
+                    style={{
+                      textAlign: 'center',
+                      padding: '0.8rem',
+                      border: '1px solid var(--border)',
+                      borderRadius: 'var(--radius)',
+                      fontSize: '1.4rem',
+                      cursor: 'pointer',
+                      backgroundColor: 'var(--card)',
+                      color: 'var(--foreground)'
+                    }}
+                    data-testid={`time-preview-${time}`}
+                  >
+                    {time}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div style={{
+              textAlign: 'center',
+              padding: '3.2rem 0',
+              color: 'var(--secondary)'
+            }}>
+              <CalendarIcon style={{
+                height: '4.8rem',
+                width: '4.8rem',
+                margin: '0 auto 1.6rem',
+                opacity: 0.5
+              }} />
+              <p>Selecione uma data para ver os horários disponíveis</p>
+            </div>
+          )}
+        </div>
+      </div>
 
-        <div className="flex justify-between mt-6">
-          <Button variant="outline" onClick={onBack} data-testid="button-back">
-            Voltar
-          </Button>
-          <Button 
-            onClick={handleConfirm} 
-            disabled={!selectedDate}
-            data-testid="button-next"
-          >
-            Próximo
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '2.4rem'
+      }}>
+        <button className="my-button" style={{
+          backgroundColor: 'transparent',
+          color: 'var(--foreground)',
+          borderColor: 'var(--border)'
+        }} onClick={onBack} data-testid="button-back">
+          Voltar
+        </button>
+        <button 
+          className="my-button"
+          style={{
+            opacity: selectedDate ? 1 : 0.5,
+            cursor: selectedDate ? 'pointer' : 'not-allowed'
+          }}
+          onClick={handleConfirm} 
+          disabled={!selectedDate}
+          data-testid="button-next"
+        >
+          Próximo
+        </button>
+      </div>
+    </div>
   );
 }

@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Header from "@/components/header";
 import { Calendar, Clock, User, Settings } from "lucide-react";
 import { Link } from "wouter";
@@ -29,10 +27,22 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando...</p>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            animation: 'spin 1s linear infinite',
+            borderRadius: '50%',
+            height: '12.8rem',
+            width: '12.8rem',
+            borderBottom: '2px solid var(--gold)',
+            margin: '0 auto 1.6rem'
+          }}></div>
+          <p style={{ color: 'var(--secondary)' }}>Carregando...</p>
         </div>
       </div>
     );
@@ -45,17 +55,32 @@ export default function Home() {
   const isBarber = user.userType === 'barber';
 
   return (
-    <div className="min-h-screen bg-background">
+    <div id="PAGES_CONTAINER" style={{
+      minHeight: '100vh',
+      backgroundColor: 'var(--background)'
+    }}>
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
+      <main style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '3.2rem 1.6rem'
+      }}>
+        <div style={{
+          maxWidth: '96rem',
+          margin: '0 auto'
+        }}>
           {/* Welcome Section */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2" data-testid="text-welcome">
+          <div style={{ marginBottom: '3.2rem' }}>
+            <h1 style={{
+              fontSize: '3rem',
+              fontWeight: 'bold',
+              marginBottom: '0.8rem',
+              color: 'var(--foreground)'
+            }} data-testid="text-welcome">
               Bem-vindo, {user.firstName || user.email}!
             </h1>
-            <p className="text-muted-foreground">
+            <p style={{ color: 'var(--secondary)' }}>
               {isBarber 
                 ? "Gerencie sua agenda e atenda seus clientes com eficiência."
                 : "Agende seus serviços favoritos de forma rápida e prática."
@@ -64,131 +89,313 @@ export default function Home() {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '2.4rem',
+            marginBottom: '3.2rem'
+          }}>
             {!isBarber && (
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" data-testid="card-new-booking">
+              <div style={{
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius)',
+                cursor: 'pointer',
+                transition: 'box-shadow 0.4s ease'
+              }} className="service-card" data-testid="card-new-booking">
                 <Link href="/booking">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Calendar className="h-6 w-6 text-accent" />
+                  <div style={{
+                    padding: '2.4rem',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{
+                      width: '4.8rem',
+                      height: '4.8rem',
+                      backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 1.6rem'
+                    }}>
+                      <Calendar style={{
+                        height: '2.4rem',
+                        width: '2.4rem',
+                        color: 'var(--gold)'
+                      }} />
                     </div>
-                    <h3 className="font-semibold mb-2">Novo Agendamento</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 style={{
+                      fontWeight: '600',
+                      marginBottom: '0.8rem',
+                      color: 'var(--foreground)'
+                    }}>Novo Agendamento</h3>
+                    <p style={{
+                      fontSize: '1.4rem',
+                      color: 'var(--secondary)'
+                    }}>
                       Agende um novo serviço
                     </p>
-                  </CardContent>
+                  </div>
                 </Link>
-              </Card>
+              </div>
             )}
 
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer" data-testid="card-appointments">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="h-6 w-6 text-blue-600" />
+            <div style={{
+              backgroundColor: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius)',
+              cursor: 'pointer',
+              transition: 'box-shadow 0.4s ease'
+            }} className="service-card" data-testid="card-appointments">
+              <div style={{
+                padding: '2.4rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '4.8rem',
+                  height: '4.8rem',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.6rem'
+                }}>
+                  <Clock style={{
+                    height: '2.4rem',
+                    width: '2.4rem',
+                    color: '#3b82f6'
+                  }} />
                 </div>
-                <h3 className="font-semibold mb-2">
+                <h3 style={{
+                  fontWeight: '600',
+                  marginBottom: '0.8rem',
+                  color: 'var(--foreground)'
+                }}>
                   {isBarber ? "Minha Agenda" : "Meus Agendamentos"}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p style={{
+                  fontSize: '1.4rem',
+                  color: 'var(--secondary)'
+                }}>
                   {isBarber ? "Visualize sua agenda" : "Veja seus agendamentos"}
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {isBarber && (
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer" data-testid="card-dashboard">
+              <div style={{
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius)',
+                cursor: 'pointer',
+                transition: 'box-shadow 0.4s ease'
+              }} className="service-card" data-testid="card-dashboard">
                 <Link href="/dashboard">
-                  <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Settings className="h-6 w-6 text-accent" />
+                  <div style={{
+                    padding: '2.4rem',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{
+                      width: '4.8rem',
+                      height: '4.8rem',
+                      backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto 1.6rem'
+                    }}>
+                      <Settings style={{
+                        height: '2.4rem',
+                        width: '2.4rem',
+                        color: 'var(--gold)'
+                      }} />
                     </div>
-                    <h3 className="font-semibold mb-2">Painel de Controle</h3>
-                    <p className="text-sm text-muted-foreground">
+                    <h3 style={{
+                      fontWeight: '600',
+                      marginBottom: '0.8rem',
+                      color: 'var(--foreground)'
+                    }}>Painel de Controle</h3>
+                    <p style={{
+                      fontSize: '1.4rem',
+                      color: 'var(--secondary)'
+                    }}>
                       Gerencie serviços e configurações
                     </p>
-                  </CardContent>
+                  </div>
                 </Link>
-              </Card>
+              </div>
             )}
 
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer" data-testid="card-profile">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="h-6 w-6 text-green-600" />
+            <div style={{
+              backgroundColor: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius)',
+              cursor: 'pointer',
+              transition: 'box-shadow 0.4s ease'
+            }} className="service-card" data-testid="card-profile">
+              <div style={{
+                padding: '2.4rem',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '4.8rem',
+                  height: '4.8rem',
+                  backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto 1.6rem'
+                }}>
+                  <User style={{
+                    height: '2.4rem',
+                    width: '2.4rem',
+                    color: '#22c55e'
+                  }} />
                 </div>
-                <h3 className="font-semibold mb-2">Meu Perfil</h3>
-                <p className="text-sm text-muted-foreground">
+                <h3 style={{
+                  fontWeight: '600',
+                  marginBottom: '0.8rem',
+                  color: 'var(--foreground)'
+                }}>Meu Perfil</h3>
+                <p style={{
+                  fontSize: '1.4rem',
+                  color: 'var(--secondary)'
+                }}>
                   Editar informações pessoais
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Recent Activity */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: '3.2rem'
+          }}>
+            <div style={{
+              backgroundColor: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius)'
+            }}>
+              <div style={{
+                padding: '1.6rem',
+                borderBottom: '1px solid var(--border)'
+              }}>
+                <h3 style={{
+                  fontSize: '1.8rem',
+                  fontWeight: '600',
+                  color: 'var(--foreground)'
+                }}>
                   {isBarber ? "Próximos Agendamentos" : "Meus Agendamentos"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="text-center py-8 text-muted-foreground" data-testid="text-no-appointments">
-                    <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Nenhum agendamento encontrado</p>
-                    {!isBarber && (
-                      <Button className="mt-4" asChild>
-                        <Link href="/booking" data-testid="button-first-booking">
-                          Fazer Primeiro Agendamento
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
+                </h3>
+              </div>
+              <div style={{ padding: '1.6rem' }}>
+                <div style={{
+                  textAlign: 'center',
+                  padding: '3.2rem 0',
+                  color: 'var(--secondary)'
+                }} data-testid="text-no-appointments">
+                  <Clock style={{
+                    height: '4.8rem',
+                    width: '4.8rem',
+                    margin: '0 auto 1.6rem',
+                    opacity: 0.5
+                  }} />
+                  <p>Nenhum agendamento encontrado</p>
+                  {!isBarber && (
+                    <button className="my-button" style={{ marginTop: '1.6rem' }}>
+                      <Link href="/booking" data-testid="button-first-booking">
+                        Fazer Primeiro Agendamento
+                      </Link>
+                    </button>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Estatísticas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+            <div style={{
+              backgroundColor: 'var(--card)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius)'
+            }}>
+              <div style={{
+                padding: '1.6rem',
+                borderBottom: '1px solid var(--border)'
+              }}>
+                <h3 style={{
+                  fontSize: '1.8rem',
+                  fontWeight: '600',
+                  color: 'var(--foreground)'
+                }}>Estatísticas</h3>
+              </div>
+              <div style={{ padding: '1.6rem' }}>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1.6rem'
+                }}>
                   {isBarber ? (
                     <>
-                      <div className="flex justify-between items-center" data-testid="stat-today">
-                        <span className="text-muted-foreground">Hoje</span>
-                        <span className="font-semibold">0 agendamentos</span>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }} data-testid="stat-today">
+                        <span style={{ color: 'var(--secondary)' }}>Hoje</span>
+                        <span style={{ fontWeight: '600' }}>0 agendamentos</span>
                       </div>
-                      <div className="flex justify-between items-center" data-testid="stat-week">
-                        <span className="text-muted-foreground">Esta semana</span>
-                        <span className="font-semibold">0 agendamentos</span>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }} data-testid="stat-week">
+                        <span style={{ color: 'var(--secondary)' }}>Esta semana</span>
+                        <span style={{ fontWeight: '600' }}>0 agendamentos</span>
                       </div>
-                      <div className="flex justify-between items-center" data-testid="stat-rating">
-                        <span className="text-muted-foreground">Avaliação média</span>
-                        <span className="font-semibold">--</span>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }} data-testid="stat-rating">
+                        <span style={{ color: 'var(--secondary)' }}>Avaliação média</span>
+                        <span style={{ fontWeight: '600' }}>--</span>
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="flex justify-between items-center" data-testid="stat-total">
-                        <span className="text-muted-foreground">Total de agendamentos</span>
-                        <span className="font-semibold">0</span>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }} data-testid="stat-total">
+                        <span style={{ color: 'var(--secondary)' }}>Total de agendamentos</span>
+                        <span style={{ fontWeight: '600' }}>0</span>
                       </div>
-                      <div className="flex justify-between items-center" data-testid="stat-upcoming">
-                        <span className="text-muted-foreground">Próximos</span>
-                        <span className="font-semibold">0</span>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }} data-testid="stat-upcoming">
+                        <span style={{ color: 'var(--secondary)' }}>Próximos</span>
+                        <span style={{ fontWeight: '600' }}>0</span>
                       </div>
-                      <div className="flex justify-between items-center" data-testid="stat-favorite">
-                        <span className="text-muted-foreground">Serviço favorito</span>
-                        <span className="font-semibold">--</span>
+                      <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }} data-testid="stat-favorite">
+                        <span style={{ color: 'var(--secondary)' }}>Serviço favorito</span>
+                        <span style={{ fontWeight: '600' }}>--</span>
                       </div>
                     </>
                   )}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </main>

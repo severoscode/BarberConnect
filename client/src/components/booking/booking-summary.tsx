@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -88,121 +86,259 @@ export default function BookingSummary({
 
   if (isBooked) {
     return (
-      <Card>
-        <CardContent className="p-6 text-center">
-          <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-semibold mb-4">Agendamento Confirmado!</h2>
-          <p className="text-muted-foreground mb-6">
-            Seu agendamento foi confirmado com sucesso. Você receberá um email de confirmação em breve.
-          </p>
-          <div className="bg-muted/50 p-4 rounded-lg mb-6">
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Serviço:</span>
-                <span className="font-medium">{service.name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Profissional:</span>
-                <span className="font-medium">{professionalName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Data:</span>
-                <span className="font-medium">
-                  {format(date, "dd 'de' MMMM, yyyy", { locale: ptBR })}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Horário:</span>
-                <span className="font-medium">{time}</span>
-              </div>
+      <div style={{
+        backgroundColor: 'var(--card)',
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius)',
+        padding: '2.4rem',
+        textAlign: 'center'
+      }}>
+        <CheckCircle style={{
+          height: '6.4rem',
+          width: '6.4rem',
+          color: '#28a745',
+          margin: '0 auto 1.6rem'
+        }} />
+        <h2 style={{
+          fontSize: '2.4rem',
+          fontWeight: '600',
+          marginBottom: '1.6rem',
+          color: 'var(--foreground)'
+        }}>Agendamento Confirmado!</h2>
+        <p style={{
+          color: 'var(--secondary)',
+          marginBottom: '2.4rem'
+        }}>
+          Seu agendamento foi confirmado com sucesso. Você receberá um email de confirmação em breve.
+        </p>
+        <div style={{
+          backgroundColor: 'rgba(153, 153, 153, 0.1)',
+          padding: '1.6rem',
+          borderRadius: 'var(--radius)',
+          marginBottom: '2.4rem'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.8rem',
+            fontSize: '1.4rem'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}>
+              <span style={{ color: 'var(--secondary)' }}>Serviço:</span>
+              <span style={{ fontWeight: '500' }}>{service.name}</span>
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}>
+              <span style={{ color: 'var(--secondary)' }}>Profissional:</span>
+              <span style={{ fontWeight: '500' }}>{professionalName}</span>
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}>
+              <span style={{ color: 'var(--secondary)' }}>Data:</span>
+              <span style={{ fontWeight: '500' }}>
+                {format(date, "dd 'de' MMMM, yyyy", { locale: ptBR })}
+              </span>
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}>
+              <span style={{ color: 'var(--secondary)' }}>Horário:</span>
+              <span style={{ fontWeight: '500' }}>{time}</span>
             </div>
           </div>
-          <Button onClick={() => window.location.href = "/"} data-testid="button-back-home">
-            Voltar ao Início
-          </Button>
-        </CardContent>
-      </Card>
+        </div>
+        <button className="my-button" onClick={() => window.location.href = "/"} data-testid="button-back-home">
+          Voltar ao Início
+        </button>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardContent className="p-6">
-        <h2 className="text-2xl font-semibold mb-6">Confirmar agendamento</h2>
-        
-        <div className="space-y-4 mb-6">
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <span className="text-muted-foreground">Serviço:</span>
-            <span className="font-medium">{service.name}</span>
-          </div>
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <span className="text-muted-foreground">Profissional:</span>
-            <span className="font-medium">{professionalName}</span>
-          </div>
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <span className="text-muted-foreground">Data:</span>
-            <span className="font-medium">
-              {format(date, "dd 'de' MMMM, yyyy", { locale: ptBR })}
-            </span>
-          </div>
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <span className="text-muted-foreground">Horário:</span>
-            <span className="font-medium">{time}</span>
-          </div>
-          <div className="flex items-center justify-between py-3 border-b border-border">
-            <span className="text-muted-foreground">Duração:</span>
-            <span className="font-medium">{service.durationMinutes} minutos</span>
-          </div>
-          <div className="flex items-center justify-between py-3">
-            <span className="text-lg font-semibold">Total:</span>
-            <span className="text-2xl font-bold text-accent">
-              R$ {parseFloat(service.price).toFixed(2)}
-            </span>
+    <div style={{
+      backgroundColor: 'var(--card)',
+      border: '1px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      padding: '2.4rem'
+    }}>
+      <h2 style={{
+        fontSize: '2.4rem',
+        fontWeight: '600',
+        marginBottom: '2.4rem',
+        color: 'var(--foreground)'
+      }}>Confirmar agendamento</h2>
+      
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.6rem',
+        marginBottom: '2.4rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.2rem 0',
+          borderBottom: '1px solid var(--border)'
+        }}>
+          <span style={{ color: 'var(--secondary)' }}>Serviço:</span>
+          <span style={{ fontWeight: '500' }}>{service.name}</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.2rem 0',
+          borderBottom: '1px solid var(--border)'
+        }}>
+          <span style={{ color: 'var(--secondary)' }}>Profissional:</span>
+          <span style={{ fontWeight: '500' }}>{professionalName}</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.2rem 0',
+          borderBottom: '1px solid var(--border)'
+        }}>
+          <span style={{ color: 'var(--secondary)' }}>Data:</span>
+          <span style={{ fontWeight: '500' }}>
+            {format(date, "dd 'de' MMMM, yyyy", { locale: ptBR })}
+          </span>
+        </div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.2rem 0',
+          borderBottom: '1px solid var(--border)'
+        }}>
+          <span style={{ color: 'var(--secondary)' }}>Horário:</span>
+          <span style={{ fontWeight: '500' }}>{time}</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.2rem 0',
+          borderBottom: '1px solid var(--border)'
+        }}>
+          <span style={{ color: 'var(--secondary)' }}>Duração:</span>
+          <span style={{ fontWeight: '500' }}>{service.durationMinutes} minutos</span>
+        </div>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '1.2rem 0'
+        }}>
+          <span style={{
+            fontSize: '1.8rem',
+            fontWeight: '600',
+            color: 'var(--foreground)'
+          }}>Total:</span>
+          <span style={{
+            fontSize: '2.4rem',
+            fontWeight: 'bold',
+            color: 'var(--gold)'
+          }}>
+            R$ {parseFloat(service.price).toFixed(2)}
+          </span>
+        </div>
+      </div>
+
+      <div style={{
+        backgroundColor: 'rgba(153, 153, 153, 0.1)',
+        padding: '1.6rem',
+        borderRadius: 'var(--radius)',
+        marginBottom: '2.4rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: '1.2rem'
+        }}>
+          <InfoIcon style={{
+            color: 'var(--gold)',
+            marginTop: '0.2rem',
+            height: '2rem',
+            width: '2rem'
+          }} />
+          <div style={{ fontSize: '1.4rem' }}>
+            <p style={{
+              fontWeight: '500',
+              marginBottom: '0.4rem',
+              color: 'var(--foreground)'
+            }}>Política de cancelamento</p>
+            <p style={{ color: 'var(--secondary)' }}>
+              Você pode cancelar este agendamento até 1 hora antes do horário marcado sem cobrança.
+            </p>
           </div>
         </div>
+      </div>
 
-        <div className="bg-muted/50 p-4 rounded-lg mb-6">
-          <div className="flex items-start space-x-3">
-            <InfoIcon className="text-accent mt-0.5 h-5 w-5" />
-            <div className="text-sm">
-              <p className="font-medium mb-1">Política de cancelamento</p>
-              <p className="text-muted-foreground">
-                Você pode cancelar este agendamento até 1 hora antes do horário marcado sem cobrança.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-          <Button 
-            variant="outline" 
-            className="flex-1" 
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.2rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1.2rem'
+        }}>
+          <button 
+            className="my-button"
+            style={{
+              flex: 1,
+              backgroundColor: 'transparent',
+              color: 'var(--foreground)',
+              borderColor: 'var(--border)'
+            }}
             onClick={onBack}
             disabled={createAppointmentMutation.isPending}
             data-testid="button-back"
           >
             Voltar
-          </Button>
-          <Button 
-            className="flex-1" 
+          </button>
+          <button 
+            className="my-button"
+            style={{ flex: 1 }}
             onClick={handleConfirmBooking}
             disabled={createAppointmentMutation.isPending}
             data-testid="button-confirm"
           >
             {createAppointmentMutation.isPending ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 style={{
+                  marginRight: '0.8rem',
+                  height: '1.6rem',
+                  width: '1.6rem',
+                  animation: 'spin 1s linear infinite'
+                }} />
                 Confirmando...
               </>
             ) : (
               <>
-                <CheckCircle className="mr-2 h-4 w-4" />
+                <CheckCircle style={{
+                  marginRight: '0.8rem',
+                  height: '1.6rem',
+                  width: '1.6rem'
+                }} />
                 Confirmar Agendamento
               </>
             )}
-          </Button>
+          </button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

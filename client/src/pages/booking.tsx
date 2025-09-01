@@ -80,10 +80,22 @@ export default function Booking() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Carregando...</p>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            animation: 'spin 1s linear infinite',
+            borderRadius: '50%',
+            height: '12.8rem',
+            width: '12.8rem',
+            borderBottom: '2px solid var(--gold)',
+            margin: '0 auto 1.6rem'
+          }}></div>
+          <p style={{ color: 'var(--secondary)' }}>Carregando...</p>
         </div>
       </div>
     );
@@ -126,14 +138,24 @@ export default function Booking() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div id="PAGES_CONTAINER" style={{
+      minHeight: '100vh',
+      backgroundColor: 'var(--background)'
+    }}>
       <Header />
       
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+      <main style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '3.2rem 1.6rem'
+      }}>
+        <div style={{
+          maxWidth: '80rem',
+          margin: '0 auto'
+        }}>
           <Stepper steps={STEPS} currentStep={currentStep} data-testid="stepper-booking" />
           
-          <div className="mt-8">
+          <div style={{ marginTop: '3.2rem' }}>
             {renderStepContent()}
           </div>
 
@@ -142,7 +164,7 @@ export default function Booking() {
            bookingData.professional && 
            bookingData.date && 
            bookingData.time && (
-            <div className="mt-8">
+            <div style={{ marginTop: '3.2rem' }}>
               <BookingSummary
                 service={bookingData.service}
                 professional={bookingData.professional}
