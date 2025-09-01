@@ -79,9 +79,9 @@ export default function DateSelection({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="flex justify-center">
           {/* Calendar */}
-          <div>
+          <div className="w-full max-w-md">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-medium">
                 {format(viewDate, "MMMM yyyy", { locale: ptBR })}
@@ -117,38 +117,6 @@ export default function DateSelection({
               className="rounded-md border"
               data-testid="calendar-date-selection"
             />
-          </div>
-          
-          {/* Available times preview */}
-          <div>
-            <h3 className="text-lg font-medium mb-4">Horários disponíveis</h3>
-            {selectedDate ? (
-              <div className="space-y-2">
-                <div className="text-sm text-muted-foreground mb-3">
-                  {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: ptBR })}
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {/* Sample available times */}
-                  {[
-                    "09:00", "09:30", "10:00", "10:30", "11:00", "14:00",
-                    "14:30", "15:00", "15:30", "16:00", "16:30", "17:00"
-                  ].map((time) => (
-                    <div
-                      key={time}
-                      className="text-center p-2 border border-border rounded-md text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer transition-colors"
-                      data-testid={`time-preview-${time}`}
-                    >
-                      {time}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                <CalendarIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Selecione uma data para ver os horários disponíveis</p>
-              </div>
-            )}
           </div>
         </div>
 
