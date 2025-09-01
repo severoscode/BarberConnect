@@ -16,7 +16,7 @@ export default function Header() {
               <span className="text-xl font-bold">BarberApp</span>
             </Link>
           </div>
-          
+
           {isAuthenticated && (
             <nav className="hidden md:flex items-center space-x-8">
               <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors" data-testid="link-home-nav">
@@ -32,16 +32,22 @@ export default function Header() {
                   Dashboard
                 </Link>
               )}
+              {/* Added "Meus Agendamentos" button */}
+              {user?.userType !== 'barber' && (
+                <Link href="/appointments" className="text-muted-foreground hover:text-foreground transition-colors" data-testid="link-appointments">
+                  Meus Agendamentos
+                </Link>
+              )}
             </nav>
           )}
-          
+
           <div className="flex items-center space-x-3">
             {isAuthenticated ? (
               <>
                 <span className="text-sm text-muted-foreground hidden md:block" data-testid="text-user-greeting">
                   Olá, {user?.firstName || user?.email}
                 </span>
-                <Button 
+                <Button
                   variant="outline"
                   onClick={() => window.location.href = "/api/logout"}
                   data-testid="button-logout"
@@ -51,14 +57,14 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Button 
+                <Button
                   variant="ghost"
                   onClick={() => window.location.href = "/api/login"}
                   data-testid="button-login"
                 >
                   Entrar
                 </Button>
-                <Button 
+                <Button
                   onClick={() => window.location.href = "/api/login"}
                   data-testid="button-register"
                 >

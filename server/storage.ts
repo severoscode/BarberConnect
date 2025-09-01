@@ -228,22 +228,7 @@ export class DatabaseStorage implements IStorage {
       : eq(appointments.professionalId, userId);
 
     const result = await db
-      .select({
-        appointment: appointments,
-        client: users,
-        professional: professionals,
-        professionalUser: {
-          id: users.id,
-          firstName: users.firstName,
-          lastName: users.lastName,
-          email: users.email,
-          profileImageUrl: users.profileImageUrl,
-          userType: users.userType,
-          createdAt: users.createdAt,
-          updatedAt: users.updatedAt,
-        },
-        service: services,
-      })
+      .select()
       .from(appointments)
       .innerJoin(users, eq(appointments.clientId, users.id))
       .leftJoin(professionals, eq(appointments.professionalId, professionals.id))
@@ -256,13 +241,13 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(appointments.startTime));
 
     return result.map((row) => ({
-      ...row.appointment,
-      client: row.client,
-      professional: row.professional ? {
-        ...row.professional,
+      ...row.appointments,
+      client: row.users,
+      professional: row.professionals ? {
+        ...row.professionals,
         user: row.professionalUser,
       } : null as any,
-      service: row.service,
+      service: row.services,
     }));
   }
 
@@ -284,6 +269,10 @@ export class DatabaseStorage implements IStorage {
       .from(appointments)
       .innerJoin(users, eq(appointments.clientId, users.id))
       .leftJoin(professionals, eq(appointments.professionalId, professionals.id))
+      .leftJoin(
+        { professionalUser: users }, 
+        eq(professionals.userId, users.id)
+      )
       .innerJoin(services, eq(appointments.serviceId, services.id))
       .where(whereCondition)
       .orderBy(asc(appointments.startTime));
@@ -293,7 +282,7 @@ export class DatabaseStorage implements IStorage {
       client: row.users,
       professional: row.professionals ? {
         ...row.professionals,
-        user: row.users,
+        user: row.professionalUser,
       } : null as any,
       service: row.services,
     }));
