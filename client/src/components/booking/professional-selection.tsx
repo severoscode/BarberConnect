@@ -1,4 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Users, Star, User } from "lucide-react";
 import type { Service, ProfessionalWithUser } from "@shared/schema";
@@ -20,361 +22,154 @@ export default function ProfessionalSelection({
 
   if (isLoading) {
     return (
-      <div style={{
-        backgroundColor: 'var(--card)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius)',
-        padding: '2.4rem'
-      }}>
-        <h2 style={{
-          fontSize: '2.4rem',
-          fontWeight: '600',
-          marginBottom: '2.4rem',
-          color: 'var(--foreground)'
-        }}>Escolha seu profissional</h2>
-        
-        {/* Any Professional Option Skeleton */}
-        <div style={{
-          border: '2px solid var(--border)',
-          borderRadius: 'var(--radius)',
-          padding: '1.6rem',
-          marginBottom: '1.6rem'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1.6rem'
-          }}>
-            <Skeleton style={{
-              width: '6.4rem',
-              height: '6.4rem',
-              borderRadius: '50%'
-            }} />
-            <div style={{ flex: 1 }}>
-              <Skeleton style={{
-                height: '2.4rem',
-                width: '19.2rem',
-                marginBottom: '0.8rem'
-              }} />
-              <Skeleton style={{
-                height: '1.6rem',
-                width: '12.8rem'
-              }} />
-            </div>
-          </div>
-        </div>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '1.6rem'
-        }}>
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} style={{
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius)',
-              padding: '1.6rem'
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1.6rem'
-              }}>
-                <Skeleton style={{
-                  width: '6.4rem',
-                  height: '6.4rem',
-                  borderRadius: '50%'
-                }} />
-                <div style={{ flex: 1 }}>
-                  <Skeleton style={{
-                    height: '2rem',
-                    width: '12.8rem',
-                    marginBottom: '0.8rem'
-                  }} />
-                  <Skeleton style={{
-                    height: '1.6rem',
-                    width: '16rem',
-                    marginBottom: '0.8rem'
-                  }} />
-                  <Skeleton style={{
-                    height: '1.6rem',
-                    width: '9.6rem'
-                  }} />
-                </div>
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-2xl font-semibold mb-6">Escolha seu profissional</h2>
+          
+          {/* Any Professional Option Skeleton */}
+          <div className="border-2 border-border rounded-lg p-4 mb-4">
+            <div className="flex items-center space-x-4">
+              <Skeleton className="w-16 h-16 rounded-full" />
+              <div className="flex-1">
+                <Skeleton className="h-6 w-48 mb-2" />
+                <Skeleton className="h-4 w-32" />
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '2.4rem'
-        }}>
-          <button className="my-button" style={{
-            backgroundColor: 'transparent',
-            color: 'var(--foreground)',
-            borderColor: 'var(--border)'
-          }} onClick={onBack}>
-            Voltar
-          </button>
-        </div>
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="border border-border rounded-lg p-4">
+                <div className="flex items-center space-x-4">
+                  <Skeleton className="w-16 h-16 rounded-full" />
+                  <div className="flex-1">
+                    <Skeleton className="h-5 w-32 mb-2" />
+                    <Skeleton className="h-4 w-40 mb-2" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-between mt-6">
+            <Button variant="outline" onClick={onBack}>
+              Voltar
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div style={{
-        backgroundColor: 'var(--card)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius)',
-        padding: '2.4rem'
-      }}>
-        <h2 style={{
-          fontSize: '2.4rem',
-          fontWeight: '600',
-          marginBottom: '2.4rem',
-          color: 'var(--foreground)'
-        }}>Escolha seu profissional</h2>
-        <div style={{
-          textAlign: 'center',
-          padding: '3.2rem 0',
-          color: 'var(--destructive)'
-        }}>
-          <p>Erro ao carregar profissionais. Tente novamente.</p>
-        </div>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '2.4rem'
-        }}>
-          <button className="my-button" style={{
-            backgroundColor: 'transparent',
-            color: 'var(--foreground)',
-            borderColor: 'var(--border)'
-          }} onClick={onBack}>
-            Voltar
-          </button>
-        </div>
-      </div>
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-2xl font-semibold mb-6">Escolha seu profissional</h2>
+          <div className="text-center py-8 text-destructive">
+            <p>Erro ao carregar profissionais. Tente novamente.</p>
+          </div>
+          <div className="flex justify-between mt-6">
+            <Button variant="outline" onClick={onBack}>
+              Voltar
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div style={{
-      backgroundColor: 'var(--card)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius)',
-      padding: '2.4rem'
-    }}>
-      <h2 style={{
-        fontSize: '2.4rem',
-        fontWeight: '600',
-        marginBottom: '2.4rem',
-        color: 'var(--foreground)'
-      }}>Escolha seu profissional</h2>
-      
-      {/* Any Professional Option */}
-      <div
-        className="barber-card"
-        style={{
-          border: '2px solid var(--gold)',
-          backgroundColor: 'rgba(255, 193, 7, 0.05)',
-          borderRadius: 'var(--radius)',
-          padding: '1.6rem',
-          marginBottom: '1.6rem',
-          cursor: 'pointer'
-        }}
-        onClick={() => onProfessionalSelect("any")}
-        data-testid="professional-any"
-      >
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1.6rem'
-        }}>
-          <div style={{
-            width: '6.4rem',
-            height: '6.4rem',
-            backgroundColor: 'rgba(255, 193, 7, 0.2)',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <Users style={{
-              color: 'var(--gold)',
-              fontSize: '2rem'
-            }} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <h3 style={{
-              fontWeight: '500',
-              fontSize: '1.8rem',
-              color: 'var(--foreground)'
-            }}>Qualquer Profissional</h3>
-            <p style={{
-              color: 'var(--secondary)'
-            }}>Primeiro horário disponível</p>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              marginTop: '0.4rem'
-            }}>
-              <span style={{
-                fontSize: '1.4rem',
-                color: 'var(--gold)',
-                fontWeight: '500'
-              }}>Mais rápido</span>
+    <Card>
+      <CardContent className="p-6">
+        <h2 className="text-2xl font-semibold mb-6">Escolha seu profissional</h2>
+        
+        {/* Any Professional Option */}
+        <div
+          className="barber-card border-2 border-accent bg-accent/5 rounded-lg p-4 mb-4 cursor-pointer transition-all duration-200"
+          onClick={() => onProfessionalSelect("any")}
+          data-testid="professional-any"
+        >
+          <div className="flex items-center space-x-4">
+            <div className="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center">
+              <Users className="text-accent text-xl" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-medium text-lg">Qualquer Profissional</h3>
+              <p className="text-muted-foreground">Primeiro horário disponível</p>
+              <div className="flex items-center space-x-1 mt-1">
+                <span className="text-sm text-accent font-medium">Mais rápido</span>
+              </div>
+            </div>
+            <div className="text-accent">
+              <i className="fas fa-check-circle text-xl"></i>
             </div>
           </div>
-          <div style={{ color: 'var(--gold)' }}>
-            <i className="fas fa-check-circle" style={{ fontSize: '2rem' }}></i>
-          </div>
         </div>
-      </div>
 
-      {professionals && professionals.length > 0 ? (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '1.6rem'
-        }}>
-          {professionals.map((professional) => (
-            <div
-              key={professional.id}
-              className="barber-card"
-              style={{
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius)',
-                padding: '1.6rem',
-                cursor: 'pointer',
-                backgroundColor: 'var(--card)'
-              }}
-              onClick={() => onProfessionalSelect(professional)}
-              data-testid={`professional-${professional.id}`}
-            >
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1.6rem'
-              }}>
-                {professional.user.profileImageUrl ? (
-                  <img
-                    src={professional.user.profileImageUrl}
-                    alt={`${professional.user.firstName} ${professional.user.lastName}`}
-                    style={{
-                      width: '6.4rem',
-                      height: '6.4rem',
-                      borderRadius: '50%',
-                      objectFit: 'cover'
-                    }}
-                  />
-                ) : (
-                  <div style={{
-                    width: '6.4rem',
-                    height: '6.4rem',
-                    background: 'linear-gradient(135deg, #d1d5db, #9ca3af)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <User style={{
-                      color: 'white',
-                      fontSize: '2rem'
-                    }} />
-                  </div>
-                )}
-                <div style={{ flex: 1 }}>
-                  <h3 style={{
-                    fontWeight: '500',
-                    fontSize: '1.8rem',
-                    color: 'var(--foreground)'
-                  }}>
-                    {professional.user.firstName} {professional.user.lastName}
-                  </h3>
-                  <p style={{
-                    color: 'var(--secondary)'
-                  }}>
-                    {professional.specialties || "Especialista em diversos serviços"}
-                  </p>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.8rem',
-                    marginTop: '0.4rem'
-                  }}>
-                    {professional.rating && parseFloat(professional.rating) > 0 ? (
-                      <>
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}>
-                          <Star style={{
-                            color: '#fbbf24',
-                            fontSize: '1.4rem',
-                            fill: 'currentColor'
-                          }} />
-                          <span style={{
-                            fontSize: '1.4rem',
-                            marginLeft: '0.4rem'
-                          }}>{parseFloat(professional.rating).toFixed(1)}</span>
-                        </div>
-                        <span style={{
-                          color: 'var(--secondary)',
-                          fontSize: '1.4rem'
-                        }}>
-                          ({professional.totalReviews || 0} avaliações)
-                        </span>
-                      </>
-                    ) : (
-                      <span style={{
-                        color: 'var(--secondary)',
-                        fontSize: '1.4rem'
-                      }}>Novo profissional</span>
-                    )}
+        {professionals && professionals.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {professionals.map((professional) => (
+              <div
+                key={professional.id}
+                className="barber-card border border-border rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-lg"
+                onClick={() => onProfessionalSelect(professional)}
+                data-testid={`professional-${professional.id}`}
+              >
+                <div className="flex items-center space-x-4">
+                  {professional.user.profileImageUrl ? (
+                    <img
+                      src={professional.user.profileImageUrl}
+                      alt={`${professional.user.firstName} ${professional.user.lastName}`}
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full flex items-center justify-center">
+                      <User className="text-white text-xl" />
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <h3 className="font-medium text-lg">
+                      {professional.user.firstName} {professional.user.lastName}
+                    </h3>
+                    <p className="text-muted-foreground">
+                      {professional.specialties || "Especialista em diversos serviços"}
+                    </p>
+                    <div className="flex items-center space-x-2 mt-1">
+                      {professional.rating && parseFloat(professional.rating) > 0 ? (
+                        <>
+                          <div className="flex items-center">
+                            <Star className="text-yellow-400 text-sm fill-current" />
+                            <span className="text-sm ml-1">{parseFloat(professional.rating).toFixed(1)}</span>
+                          </div>
+                          <span className="text-muted-foreground text-sm">
+                            ({professional.totalReviews || 0} avaliações)
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-muted-foreground text-sm">Novo profissional</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div style={{
-          textAlign: 'center',
-          padding: '3.2rem 0',
-          color: 'var(--secondary)'
-        }}>
-          <User style={{
-            height: '4.8rem',
-            width: '4.8rem',
-            margin: '0 auto 1.6rem',
-            opacity: 0.5
-          }} />
-          <p>Nenhum profissional disponível no momento.</p>
-          <p style={{
-            fontSize: '1.4rem',
-            marginTop: '0.8rem'
-          }}>Tente a opção "Qualquer Profissional" acima.</p>
-        </div>
-      )}
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            <User className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Nenhum profissional disponível no momento.</p>
+            <p className="text-sm mt-2">Tente a opção "Qualquer Profissional" acima.</p>
+          </div>
+        )}
 
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: '2.4rem'
-      }}>
-        <button className="my-button" style={{
-          backgroundColor: 'transparent',
-          color: 'var(--foreground)',
-          borderColor: 'var(--border)'
-        }} onClick={onBack} data-testid="button-back">
-          Voltar
-        </button>
-      </div>
-    </div>
+        <div className="flex justify-between mt-6">
+          <Button variant="outline" onClick={onBack} data-testid="button-back">
+            Voltar
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

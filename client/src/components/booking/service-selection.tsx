@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Scissors, Clock, DollarSign } from "lucide-react";
 import type { Service } from "@shared/schema";
@@ -14,124 +15,52 @@ export default function ServiceSelection({ onServiceSelect }: ServiceSelectionPr
 
   if (isLoading) {
     return (
-      <div style={{
-        backgroundColor: 'var(--card)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius)',
-        padding: '2.4rem'
-      }}>
-        <h2 style={{
-          fontSize: '2.4rem',
-          fontWeight: '600',
-          marginBottom: '2.4rem',
-          color: 'var(--foreground)'
-        }}>Escolha seu serviço</h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '1.6rem'
-        }}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} style={{
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius)',
-              padding: '1.6rem'
-            }}>
-              <Skeleton style={{
-                height: '4.8rem',
-                width: '4.8rem',
-                borderRadius: 'var(--radius)',
-                marginBottom: '1.2rem'
-              }} />
-              <Skeleton style={{
-                height: '2rem',
-                width: '12.8rem',
-                marginBottom: '0.8rem'
-              }} />
-              <Skeleton style={{
-                height: '1.6rem',
-                width: '8rem',
-                marginBottom: '1.2rem'
-              }} />
-              <Skeleton style={{
-                height: '1.6rem',
-                width: '100%',
-                marginBottom: '1.2rem'
-              }} />
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}>
-                <Skeleton style={{
-                  height: '2.4rem',
-                  width: '8rem'
-                }} />
-                <Skeleton style={{
-                  height: '1.6rem',
-                  width: '6.4rem'
-                }} />
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-2xl font-semibold mb-6">Escolha seu serviço</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="border border-border rounded-lg p-4">
+                <Skeleton className="h-12 w-12 rounded-lg mb-3" />
+                <Skeleton className="h-5 w-32 mb-2" />
+                <Skeleton className="h-4 w-20 mb-3" />
+                <Skeleton className="h-4 w-full mb-3" />
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-6 w-20" />
+                  <Skeleton className="h-4 w-16" />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div style={{
-        backgroundColor: 'var(--card)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius)',
-        padding: '2.4rem'
-      }}>
-        <h2 style={{
-          fontSize: '2.4rem',
-          fontWeight: '600',
-          marginBottom: '2.4rem',
-          color: 'var(--foreground)'
-        }}>Escolha seu serviço</h2>
-        <div style={{
-          textAlign: 'center',
-          padding: '3.2rem 0',
-          color: 'var(--destructive)'
-        }}>
-          <p>Erro ao carregar serviços. Tente novamente.</p>
-        </div>
-      </div>
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-2xl font-semibold mb-6">Escolha seu serviço</h2>
+          <div className="text-center py-8 text-destructive">
+            <p>Erro ao carregar serviços. Tente novamente.</p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (!services || services.length === 0) {
     return (
-      <div style={{
-        backgroundColor: 'var(--card)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius)',
-        padding: '2.4rem'
-      }}>
-        <h2 style={{
-          fontSize: '2.4rem',
-          fontWeight: '600',
-          marginBottom: '2.4rem',
-          color: 'var(--foreground)'
-        }}>Escolha seu serviço</h2>
-        <div style={{
-          textAlign: 'center',
-          padding: '3.2rem 0',
-          color: 'var(--secondary)'
-        }}>
-          <Scissors style={{
-            height: '4.8rem',
-            width: '4.8rem',
-            margin: '0 auto 1.6rem',
-            opacity: 0.5
-          }} />
-          <p>Nenhum serviço disponível no momento.</p>
-        </div>
-      </div>
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-2xl font-semibold mb-6">Escolha seu serviço</h2>
+          <div className="text-center py-8 text-muted-foreground">
+            <Scissors className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Nenhum serviço disponível no momento.</p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -146,123 +75,45 @@ export default function ServiceSelection({ onServiceSelect }: ServiceSelectionPr
   };
 
   return (
-    <div style={{
-      backgroundColor: 'var(--card)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius)',
-      padding: '2.4rem'
-    }}>
-      <h2 style={{
-        fontSize: '2.4rem',
-        fontWeight: '600',
-        marginBottom: '2.4rem',
-        color: 'var(--foreground)'
-      }}>Escolha seu serviço</h2>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '1.6rem'
-      }}>
-        {services.map((service) => (
-          <div
-            key={service.id}
-            className="service-card"
-            style={{
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius)',
-              padding: '1.6rem',
-              cursor: 'pointer',
-              backgroundColor: 'var(--card)'
-            }}
-            onClick={() => onServiceSelect(service)}
-            data-testid={`service-${service.id}`}
-          >
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1.2rem',
-              marginBottom: '1.2rem'
-            }}>
-              <div style={{
-                width: '4.8rem',
-                height: '4.8rem',
-                backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                borderRadius: 'var(--radius)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <i className={`fas ${getServiceIcon(service.name)}`} style={{
-                  color: 'var(--gold)',
-                  fontSize: '1.8rem'
-                }}></i>
+    <Card>
+      <CardContent className="p-6">
+        <h2 className="text-2xl font-semibold mb-6">Escolha seu serviço</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {services.map((service) => (
+            <div
+              key={service.id}
+              className="service-card border border-border rounded-lg p-4 cursor-pointer transition-all duration-200 hover:shadow-lg"
+              onClick={() => onServiceSelect(service)}
+              data-testid={`service-${service.id}`}
+            >
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center">
+                  <i className={`fas ${getServiceIcon(service.name)} text-accent text-lg`}></i>
+                </div>
+                <div>
+                  <h3 className="font-medium">{service.name}</h3>
+                  <p className="text-sm text-muted-foreground flex items-center">
+                    <Clock className="h-3 w-3 mr-1" />
+                    {service.durationMinutes} min
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 style={{
-                  fontWeight: '500',
-                  color: 'var(--foreground)'
-                }}>{service.name}</h3>
-                <p style={{
-                  fontSize: '1.4rem',
-                  color: 'var(--secondary)',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}>
-                  <Clock style={{
-                    height: '1.2rem',
-                    width: '1.2rem',
-                    marginRight: '0.4rem'
-                  }} />
-                  {service.durationMinutes} min
-                </p>
+              {service.description && (
+                <p className="text-sm text-muted-foreground mb-3">{service.description}</p>
+              )}
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-semibold flex items-center">
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  R$ {parseFloat(service.price).toFixed(2)}
+                </span>
+                <button className="text-sm text-accent hover:text-accent/80">
+                  Selecionar
+                </button>
               </div>
             </div>
-            {service.description && (
-              <p style={{
-                fontSize: '1.4rem',
-                color: 'var(--secondary)',
-                marginBottom: '1.2rem'
-              }}>{service.description}</p>
-            )}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}>
-              <span style={{
-                fontSize: '1.8rem',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center',
-                color: 'var(--foreground)'
-              }}>
-                <DollarSign style={{
-                  height: '1.6rem',
-                  width: '1.6rem',
-                  marginRight: '0.4rem'
-                }} />
-                R$ {parseFloat(service.price).toFixed(2)}
-              </span>
-              <button style={{
-                fontSize: '1.4rem',
-                color: 'var(--gold)',
-                cursor: 'pointer',
-                background: 'none',
-                border: 'none',
-                padding: '0.4rem 0.8rem',
-                borderRadius: 'var(--radius)',
-                transition: 'all 0.4s ease'
-              }} onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'rgba(255, 193, 7, 0.8)';
-              }} onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--gold)';
-              }}>
-                Selecionar
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

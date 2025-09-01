@@ -1,324 +1,147 @@
-/* Reset padrão de margens, paddings, etc. */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Base do corpo da página */
-body {
-    background-color: transparent;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 10px; /* Base para o uso de 'rem' */
-}
-
-/* Remover decorações de links */
-a {
-    text-decoration: none;
-    cursor: pointer;
-    color: inherit;
-}
-
-/* Esconder elementos que são carregados via JavaScript */
-[data-hide-prejs] {
-    visibility: hidden;
-}
-
-/* Centralizar o conteúdo do site e limitar a largura */
-#site-root {
-    margin: 0 auto;
-    min-height: 100%;
-    position: relative;
-    width: 100%;
-    max-width: 1200px; /* Exemplo de largura máxima para o site */
-}
-
-/* Container principal com layout de grade para a estrutura do site */
-#masterPage.mesh-layout {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: max-content min-content max-content; /* Cabeçalho, conteúdo, rodapé */
-    align-items: start;
-    justify-content: stretch;
-    min-height: 100vh; /* Garante que o layout ocupe a altura total da viewport */
-}
-
-/* Área do cabeçalho */
-#SITE_HEADER_WRAPPER {
-    grid-area: 1 / 1 / 2 / 2;
-    position: relative;
-    width: 100%;
-}
-
-/* Área do conteúdo principal (páginas) */
-#PAGES_CONTAINER {
-    grid-area: 2 / 1 / 3 / 2;
-    position: relative;
-    align-self: stretch; /* Ocupa todo o espaço vertical disponível */
-}
-
-/* Área do rodapé */
-#SITE_FOOTER_WRAPPER {
-    grid-area: 3 / 1 / 4 / 2;
-    position: relative;
-    width: 100%;
-}
-
-/* Variáveis CSS personalizadas */
 :root {
-  /* Definição de cores e fontes personalizadas */
-  --color_11: 255, 255, 255; /* Cor de fundo base */
-  --color_14: 153, 153, 153; /* Cor de texto secundário */
-  --color_15: 0, 0, 0; /* Cor de texto primário */
-  --color_48: 0, 0, 0; /* Cor de preenchimento do botão */
-  --color_49: 0, 0, 0; /* Cor da borda do botão */
-  --color_50: 255, 255, 255; /* Cor do texto do botão */
-  --color_51: 51, 51, 51; /* Cor de preenchimento do botão (hover) */
-  --color_52: 51, 51, 51; /* Cor da borda do botão (hover) */
-  --color_53: 255, 255, 255; /* Cor do texto do botão (hover) */
-  
-  /* Exemplo de fontes (substitua pelas suas) */
-  --font_1: normal 16px "Arial";
-  
-  /* Cores específicas do projeto */
-  --background: rgb(var(--color_11));
-  --foreground: rgb(var(--color_15));
-  --card: rgb(var(--color_11));
-  --card-foreground: rgb(var(--color_15));
-  --primary: rgb(var(--color_48));
-  --primary-foreground: rgb(var(--color_50));
-  --secondary: rgb(var(--color_14));
-  --secondary-foreground: rgb(var(--color_15));
-  --accent: 255, 193, 7; /* Cor dourada */
-  --accent-foreground: rgb(var(--color_15));
-  --destructive: 220, 53, 69; /* Cor vermelha */
-  --destructive-foreground: rgb(var(--color_11));
-  --border: rgb(var(--color_14));
-  --input: rgb(var(--color_11));
-  --ring: rgb(var(--accent));
-  --gold: rgb(var(--accent));
+  --background: hsl(0, 0%, 98%);
+  --foreground: hsl(0, 0%, 15%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(0, 0%, 15%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(0, 0%, 15%);
+  --primary: hsl(0, 0%, 10%);
+  --primary-foreground: hsl(0, 0%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222.2, 84%, 4.9%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
+  --accent: hsl(45, 100%, 51%);
+  --accent-foreground: hsl(0, 0%, 15%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(214.3, 31.8%, 91.4%);
+  --input: hsl(214.3, 31.8%, 91.4%);
+  --ring: hsl(45, 100%, 51%);
+  --gold: hsl(45, 100%, 51%);
   --radius: 0.75rem;
-  --font-sans: Arial, Helvetica, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
 }
 
-/* Estilos de botões */
-.my-button {
-    --bg-color: rgb(var(--color_48));
-    --text-color: rgb(var(--color_50));
-    --border-color: rgb(var(--color_49));
-    --hover-bg-color: rgb(var(--color_51));
-    --hover-text-color: rgb(var(--color_53));
-    --hover-border-color: rgb(var(--color_52));
-    
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1.6rem;
-    transition: background-color 0.4s ease, color 0.4s ease; /* Transição suave */
+.dark {
+  --background: hsl(0, 0%, 10%);
+  --foreground: hsl(0, 0%, 95%);
+  --card: hsl(0, 0%, 8%);
+  --card-foreground: hsl(0, 0%, 95%);
+  --popover: hsl(0, 0%, 8%);
+  --popover-foreground: hsl(0, 0%, 95%);
+  --primary: hsl(45, 100%, 51%);
+  --primary-foreground: hsl(0, 0%, 15%);
+  --secondary: hsl(217.2, 32.6%, 17.5%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217.2, 32.6%, 17.5%);
+  --muted-foreground: hsl(215, 20.2%, 65.1%);
+  --accent: hsl(45, 100%, 51%);
+  --accent-foreground: hsl(0, 0%, 15%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217.2, 32.6%, 17.5%);
+  --input: hsl(217.2, 32.6%, 17.5%);
+  --ring: hsl(45, 100%, 51%);
 }
 
-/* Estilo ao passar o mouse */
-.my-button:hover {
-    background-color: var(--hover-bg-color);
-    color: var(--hover-text-color);
-    border-color: var(--hover-border-color);
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
 }
 
-/* Exemplo de Link de Navegação */
-.nav-link {
-    color: rgb(var(--color_15));
-    padding: 0 10px;
-    font: var(--font_1);
-    transition: color 0.4s ease; /* Transição suave */
-}
-
-/* Estilo ao passar o mouse */
-.nav-link:hover {
-    color: rgb(var(--color_14)); /* Cor de hover */
-}
-
-/* Estilos específicos do projeto */
-.stepper-line {
+@layer components {
+  .stepper-line {
     background: linear-gradient(to right, var(--gold) 0%, var(--gold) 50%, var(--border) 50%, var(--border) 100%);
-}
+  }
 
-.stepper-line.completed {
+  .stepper-line.completed {
     background: var(--gold);
-}
+  }
 
-.service-card {
-    transition: all 0.4s ease;
-}
+  .service-card {
+    @apply transition-all duration-200;
+  }
 
-.service-card:hover {
+  .service-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
+  }
 
-.service-card.selected {
-    border-color: var(--gold);
-    background-color: rgba(255, 193, 7, 0.05);
-}
+  .service-card.selected {
+    @apply border-accent;
+    background-color: hsl(var(--accent) / 0.05);
+  }
 
-.barber-card {
-    transition: all 0.4s ease;
-}
+  .barber-card {
+    @apply transition-all duration-200;
+  }
 
-.barber-card:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
+  .barber-card:hover {
+    @apply shadow-lg;
+  }
 
-.barber-card.selected {
-    border-color: var(--gold);
-    background-color: rgba(255, 193, 7, 0.05);
-}
+  .barber-card.selected {
+    @apply border-accent;
+    background-color: hsl(var(--accent) / 0.05);
+  }
 
-.time-slot {
-    transition: all 0.4s ease;
-}
+  .time-slot {
+    @apply transition-colors duration-200;
+  }
 
-.time-slot:hover {
-    background-color: var(--gold);
-    color: var(--color_15);
-}
+  .time-slot:hover {
+    @apply bg-accent text-accent-foreground;
+  }
 
-.time-slot.selected {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-}
+  .time-slot.selected {
+    @apply bg-primary text-primary-foreground;
+  }
 
-.calendar-day {
-    transition: all 0.4s ease;
-}
+  .calendar-day {
+    @apply transition-colors duration-200;
+  }
 
-.calendar-day.available:hover {
-    background-color: var(--gold);
-    color: var(--color_15);
-}
+  .calendar-day.available:hover {
+    @apply bg-accent text-accent-foreground;
+  }
 
-.calendar-day.selected {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-}
+  .calendar-day.selected {
+    @apply bg-primary text-primary-foreground;
+  }
 
-.appointment-card {
-    border-left: 4px solid;
-}
+  .appointment-card {
+    @apply border-l-4;
+  }
 
-.appointment-card.pending {
-    border-left-color: #ffc107;
-    background-color: rgba(255, 193, 7, 0.1);
-}
+  .appointment-card.pending {
+    @apply border-l-yellow-500 bg-yellow-50 dark:bg-yellow-950/20;
+  }
 
-.appointment-card.confirmed {
-    border-left-color: var(--gold);
-    background-color: rgba(255, 193, 7, 0.1);
-}
+  .appointment-card.confirmed {
+    @apply border-l-accent;
+    background-color: hsl(var(--accent) / 0.1);
+  }
 
-.appointment-card.completed {
-    border-left-color: #28a745;
-    background-color: rgba(40, 167, 69, 0.1);
-}
+  .appointment-card.completed {
+    @apply border-l-green-500 bg-green-50 dark:bg-green-950/20;
+  }
 
-.appointment-card.cancelled {
-    border-left-color: var(--destructive);
-    background-color: rgba(220, 53, 69, 0.1);
-}
-
-/* Animações CSS */
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-}
-
-/* Classes de animação */
-.animate-fade-in {
-    animation: fadeIn 0.6s ease-out;
-}
-
-.animate-slide-in {
-    animation: slideIn 0.4s ease-out;
-}
-
-.animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Estilos para telas menores (smartphones) */
-@media (max-width: 768px) {
-    body {
-        /* Desativa o scroll horizontal */
-        overflow-x: hidden; 
-    }
-    
-    /* Centraliza o site e limita a largura para a visualização mobile */
-    body.device-mobile-optimized:not(.responsive) #SITE_CONTAINER {
-        margin: 0 auto;
-        overflow-x: visible;
-        width: 320px;
-    }
-
-    /* Oculta o menu de desktop e exibe o menu mobile (se houver) */
-    .desktop-menu {
-        display: none;
-    }
-    .mobile-menu {
-        display: block;
-    }
-    
-    /* Ajustes para componentes mobile */
-    .my-button {
-        padding: 8px 16px;
-        font-size: 1.4rem;
-    }
-    
-    .service-card, .barber-card {
-        margin-bottom: 1rem;
-    }
-    
-    /* Ajustes de grid para mobile */
-    #masterPage.mesh-layout {
-        grid-template-rows: max-content 1fr max-content;
-    }
-    
-    /* Ajustes de padding para mobile */
-    #PAGES_CONTAINER main {
-        padding: 1.6rem 0.8rem;
-    }
+  .appointment-card.cancelled {
+    @apply border-l-destructive;
+    background-color: hsl(var(--destructive) / 0.1);
+  }
 }

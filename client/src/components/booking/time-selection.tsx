@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -60,228 +62,111 @@ export default function TimeSelection({
   const { morning, afternoon } = availableSlots ? organizeSlotsByPeriod(availableSlots) : { morning: [], afternoon: [] };
 
   return (
-    <div style={{
-      backgroundColor: 'var(--card)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius)',
-      padding: '2.4rem'
-    }}>
-      <h2 style={{
-        fontSize: '2.4rem',
-        fontWeight: '600',
-        marginBottom: '2.4rem',
-        color: 'var(--foreground)'
-      }}>Escolha o horário</h2>
-      
-      {/* Selected service, professional and date info */}
-      <div style={{
-        backgroundColor: 'rgba(153, 153, 153, 0.1)',
-        padding: '1.6rem',
-        borderRadius: 'var(--radius)',
-        marginBottom: '2.4rem'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1.6rem'
-        }}>
-          <CalendarIcon style={{
-            color: 'var(--gold)',
-            height: '2rem',
-            width: '2rem'
-          }} />
-          <div>
-            <p style={{
-              fontWeight: '500',
-              color: 'var(--foreground)'
-            }}>
-              {format(date, "dd 'de' MMMM, yyyy", { locale: ptBR })} - {format(date, "EEEE", { locale: ptBR })}
-            </p>
-            <p style={{
-              fontSize: '1.4rem',
-              color: 'var(--secondary)'
-            }}>
-              {service.name} • {professionalName} • {service.durationMinutes} min
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {isLoading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.4rem' }}>
-          <div>
-            <Skeleton style={{
-              height: '2rem',
-              width: '6.4rem',
-              marginBottom: '1.6rem'
-            }} />
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
-              gap: '1.2rem'
-            }}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} style={{
-                  height: '4.8rem',
-                  width: '100%'
-                }} />
-              ))}
-            </div>
-          </div>
-          <div>
-            <Skeleton style={{
-              height: '2rem',
-              width: '6.4rem',
-              marginBottom: '1.6rem'
-            }} />
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
-              gap: '1.2rem'
-            }}>
-              {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} style={{
-                  height: '4.8rem',
-                  width: '100%'
-                }} />
-              ))}
-            </div>
-          </div>
-        </div>
-      ) : availableSlots && availableSlots.length > 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2.4rem' }}>
-          {morning.length > 0 && (
+    <Card>
+      <CardContent className="p-6">
+        <h2 className="text-2xl font-semibold mb-6">Escolha o horário</h2>
+        
+        {/* Selected service, professional and date info */}
+        <div className="bg-muted/50 p-4 rounded-lg mb-6">
+          <div className="flex items-center space-x-4">
+            <CalendarIcon className="text-accent h-5 w-5" />
             <div>
-              <h3 style={{
-                fontWeight: '500',
-                marginBottom: '1.6rem',
-                display: 'flex',
-                alignItems: 'center',
-                color: 'var(--foreground)'
-              }}>
-                <Clock style={{
-                  height: '1.6rem',
-                  width: '1.6rem',
-                  marginRight: '0.8rem'
-                }} />
-                Manhã
-              </h3>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
-                gap: '1.2rem'
-              }}>
-                {morning.map((time) => (
-                  <button
-                    key={time}
-                    className="time-slot"
-                    style={{
-                      padding: '1.2rem',
-                      border: '1px solid var(--border)',
-                      borderRadius: 'var(--radius)',
-                      textAlign: 'center',
-                      backgroundColor: selectedTime === time ? 'var(--primary)' : 'var(--card)',
-                      color: selectedTime === time ? 'var(--primary-foreground)' : 'var(--foreground)',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => handleTimeSelect(time)}
-                    data-testid={`time-${time}`}
-                  >
-                    {time}
-                  </button>
+              <p className="font-medium">
+                {format(date, "dd 'de' MMMM, yyyy", { locale: ptBR })} - {format(date, "EEEE", { locale: ptBR })}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {service.name} • {professionalName} • {service.durationMinutes} min
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="space-y-6">
+            <div>
+              <Skeleton className="h-5 w-16 mb-4" />
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-12 w-full" />
                 ))}
               </div>
             </div>
-          )}
-
-          {afternoon.length > 0 && (
             <div>
-              <h3 style={{
-                fontWeight: '500',
-                marginBottom: '1.6rem',
-                display: 'flex',
-                alignItems: 'center',
-                color: 'var(--foreground)'
-              }}>
-                <Clock style={{
-                  height: '1.6rem',
-                  width: '1.6rem',
-                  marginRight: '0.8rem'
-                }} />
-                Tarde
-              </h3>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
-                gap: '1.2rem'
-              }}>
-                {afternoon.map((time) => (
-                  <button
-                    key={time}
-                    className="time-slot"
-                    style={{
-                      padding: '1.2rem',
-                      border: '1px solid var(--border)',
-                      borderRadius: 'var(--radius)',
-                      textAlign: 'center',
-                      backgroundColor: selectedTime === time ? 'var(--primary)' : 'var(--card)',
-                      color: selectedTime === time ? 'var(--primary-foreground)' : 'var(--foreground)',
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => handleTimeSelect(time)}
-                    data-testid={`time-${time}`}
-                  >
-                    {time}
-                  </button>
+              <Skeleton className="h-5 w-16 mb-4" />
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <Skeleton key={i} className="h-12 w-full" />
                 ))}
               </div>
             </div>
-          )}
-        </div>
-      ) : (
-        <div style={{
-          textAlign: 'center',
-          padding: '3.2rem 0',
-          color: 'var(--secondary)'
-        }}>
-          <Clock style={{
-            height: '4.8rem',
-            width: '4.8rem',
-            margin: '0 auto 1.6rem',
-            opacity: 0.5
-          }} />
-          <p>Nenhum horário disponível para esta data.</p>
-          <p style={{
-            fontSize: '1.4rem',
-            marginTop: '0.8rem'
-          }}>Tente selecionar outra data.</p>
-        </div>
-      )}
+          </div>
+        ) : availableSlots && availableSlots.length > 0 ? (
+          <div className="space-y-6">
+            {morning.length > 0 && (
+              <div>
+                <h3 className="font-medium mb-4 flex items-center">
+                  <Clock className="h-4 w-4 mr-2" />
+                  Manhã
+                </h3>
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {morning.map((time) => (
+                    <button
+                      key={time}
+                      className={`time-slot p-3 border border-border rounded-md text-center transition-colors ${
+                        selectedTime === time ? 'selected bg-primary text-primary-foreground' : ''
+                      }`}
+                      onClick={() => handleTimeSelect(time)}
+                      data-testid={`time-${time}`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: '2.4rem'
-      }}>
-        <button className="my-button" style={{
-          backgroundColor: 'transparent',
-          color: 'var(--foreground)',
-          borderColor: 'var(--border)'
-        }} onClick={onBack} data-testid="button-back">
-          Voltar
-        </button>
-        {selectedTime && (
-          <span style={{
-            fontSize: '1.4rem',
-            color: 'var(--secondary)',
-            display: 'flex',
-            alignItems: 'center'
-          }}>
-            Horário selecionado: <strong style={{ marginLeft: '0.4rem' }}>{selectedTime}</strong>
-          </span>
+            {afternoon.length > 0 && (
+              <div>
+                <h3 className="font-medium mb-4 flex items-center">
+                  <Clock className="h-4 w-4 mr-2" />
+                  Tarde
+                </h3>
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {afternoon.map((time) => (
+                    <button
+                      key={time}
+                      className={`time-slot p-3 border border-border rounded-md text-center transition-colors ${
+                        selectedTime === time ? 'selected bg-primary text-primary-foreground' : ''
+                      }`}
+                      onClick={() => handleTimeSelect(time)}
+                      data-testid={`time-${time}`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="text-center py-8 text-muted-foreground">
+            <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>Nenhum horário disponível para esta data.</p>
+            <p className="text-sm mt-2">Tente selecionar outra data.</p>
+          </div>
         )}
-      </div>
-    </div>
+
+        <div className="flex justify-between mt-6">
+          <Button variant="outline" onClick={onBack} data-testid="button-back">
+            Voltar
+          </Button>
+          {selectedTime && (
+            <span className="text-sm text-muted-foreground flex items-center">
+              Horário selecionado: <strong className="ml-1">{selectedTime}</strong>
+            </span>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }

@@ -31,16 +31,12 @@ function Router() {
 
 function App() {
   return (
-    <div id="site-root">
-      <div id="masterPage" className="mesh-layout">
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </QueryClientProvider>
-      </div>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Router />
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 
