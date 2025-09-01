@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
@@ -16,17 +16,17 @@ interface TimeSelectionProps {
   onBack: () => void;
 }
 
-export default function TimeSelection({ 
-  service, 
-  professional, 
-  date, 
-  onTimeSelect, 
-  onBack 
+export default function TimeSelection({
+  service,
+  professional,
+  date,
+  onTimeSelect,
+  onBack
 }: TimeSelectionProps) {
   const [selectedTime, setSelectedTime] = useState<string>();
 
   const professionalId = professional === "any" ? undefined : professional.id;
-  
+
   const { data: availableSlots, isLoading, error } = useQuery<string[]>({
     queryKey: ["/api/available-slots", date.toISOString().split('T')[0], service.id, professionalId],
     queryFn: async () => {
@@ -35,7 +35,7 @@ export default function TimeSelection({
         serviceId: service.id,
         ...(professionalId && { professionalId })
       });
-      
+
       const response = await fetch(`/api/available-slots?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch available slots');
@@ -50,8 +50,8 @@ export default function TimeSelection({
     onTimeSelect(time);
   };
 
-  const professionalName = professional === "any" 
-    ? "Qualquer profissional" 
+  const professionalName = professional === "any"
+    ? "Qualquer profissional"
     : `${professional.user.firstName} ${professional.user.lastName}`;
 
   const organizeSlotsByPeriod = (slots: string[]) => {
@@ -59,7 +59,7 @@ export default function TimeSelection({
       const hour = parseInt(slot.split(':')[0]);
       return hour < 12;
     });
-    
+
     const afternoon = slots.filter(slot => {
       const hour = parseInt(slot.split(':')[0]);
       return hour >= 12;
@@ -79,7 +79,7 @@ export default function TimeSelection({
     <Card>
       <CardContent className="p-6">
         <h2 className="text-2xl font-semibold mb-6">Escolha o horário</h2>
-        
+
         {/* Selected service, professional and date info */}
         <div className="bg-muted/50 p-4 rounded-lg mb-6">
           <div className="flex items-center space-x-4">

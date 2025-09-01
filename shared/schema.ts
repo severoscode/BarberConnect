@@ -182,6 +182,9 @@ export const insertAppointmentSchema = createInsertSchema(appointments).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  startTime: z.string().transform((str) => new Date(str)),
+  endTime: z.string().transform((str) => new Date(str)),
 });
 
 export const insertProfessionalServiceSchema = createInsertSchema(professionalServices).omit({
