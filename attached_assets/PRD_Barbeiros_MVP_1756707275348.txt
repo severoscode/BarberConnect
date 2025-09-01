@@ -1,0 +1,172 @@
+📄 PRD – MVP Aplicativo Web para Barbeiros
+
+1. Visão Geral
+
+O aplicativo permitirá que clientes agendem serviços em barbearias de
+forma simples e prática. O diferencial (função matadora) será a
+possibilidade de agendamento online com escolha do serviço, do barbeiro
+e do horário disponível.
+
+O MVP terá foco em cadastro, agendamento, gerenciamento de agenda e
+notificações básicas, validando a aderência do mercado.
+
+------------------------------------------------------------------------
+
+2. Público-Alvo
+
+-   Barbeiros autônomos que precisam de um sistema digital para
+    controlar agenda.
+-   Barbearias com equipe que desejam centralizar agendamentos por
+    profissional.
+-   Clientes finais que buscam conveniência para marcar serviços sem
+    contato telefônico.
+
+------------------------------------------------------------------------
+
+3. Objetivos do MVP
+
+1.  Disponibilizar uma interface onde o cliente consiga escolher
+    serviço, barbeiro, data e horário.
+2.  Criar um painel simples para barbeiros configurarem serviços,
+    horários e pausas.
+3.  Permitir gerenciamento de agendamentos (confirmar, remarcar,
+    cancelar).
+4.  Enviar notificações de confirmações e cancelamentos.
+5.  Testar a aceitação do modelo antes de evoluir para pagamentos,
+    fidelidade e mobile.
+
+------------------------------------------------------------------------
+
+4. Funcionalidades do MVP
+
+4.1. Para Clientes
+
+-   Cadastro/login (nome, telefone, e-mail).
+-   Catálogo de serviços (corte, barba, penteado, pintura etc.) com
+    preço e duração.
+-   Agendamento:
+    -   Passo 1: escolher serviço.
+    -   Passo 2: escolher profissional (ou opção “Qualquer
+        profissional”).
+    -   Passo 3: escolher dia e horário disponível.
+    -   Passo 4: confirmar agendamento.
+-   Notificações de confirmação/cancelamento via e-mail (e WhatsApp
+    futuramente).
+-   Cancelar agendamento dentro do prazo permitido (ex.: até 1h antes).
+
+4.2. Para Barbeiros / Admin da Barbearia
+
+-   Cadastro/login.
+-   Definir serviços que executa (ex.: corte, barba, pintura).
+-   Definir agenda de trabalho (dias, horários, pausas).
+-   Visualizar agenda individual (por barbeiro) ou geral (admin).
+-   Confirmar, remarcar ou cancelar agendamentos.
+
+------------------------------------------------------------------------
+
+5. Funcionalidades Futuras (fora do MVP, mas previstas)
+
+-   Pagamentos online (Pix, cartão).
+-   Programa de fidelidade.
+-   Avaliações de clientes.
+-   Integração com redes sociais.
+-   App mobile nativo (iOS e Android).
+
+------------------------------------------------------------------------
+
+6. Fluxo do Usuário
+
+Cliente
+
+1.  Acessa a plataforma.
+2.  Faz login/cadastro.
+3.  Escolhe serviço → profissional → dia → horário.
+4.  Recebe confirmação do agendamento.
+5.  Caso necessário, cancela pelo painel.
+
+Barbeiro/Admin
+
+1.  Faz login.
+2.  Configura serviços e agenda de trabalho.
+3.  Recebe notificações de novos agendamentos.
+4.  Gerencia compromissos no painel.
+
+------------------------------------------------------------------------
+
+7. Requisitos Técnicos
+
+-   Frontend: React.js ou Vue.js (responsivo).
+-   Backend: Node.js (Express ou NestJS).
+-   Banco de Dados: MongoDB ou PostgreSQL.
+-   Infraestrutura: Deploy inicial em Vercel/Render/Heroku.
+-   Autenticação: JWT (login por e-mail/senha).
+-   Notificações: SMTP (e-mail). Integração futura com WhatsApp.
+
+Modelo de Dados (simplificado)
+
+-   users: id, nome, telefone, email,
+    tipo(‘cliente’|‘barbeiro’|‘admin’).
+-   professionals: id, nome, skills:[service_id], agenda, pausas.
+-   services: id, nome, duração_min, preço.
+-   appointments: id, customer_id, professional_id, service_id,
+    start_at, end_at, status.
+
+------------------------------------------------------------------------
+
+8. Regras de Agendamento
+
+-   Só exibir slots disponíveis conforme agenda do barbeiro.
+-   Considerar duração do serviço e pausas cadastradas.
+-   Prevenir conflitos (dois clientes tentando mesmo horário).
+-   Opção “Qualquer profissional”: sistema busca primeiro horário livre
+    entre os habilitados.
+
+------------------------------------------------------------------------
+
+9. UX/UI
+
+-   Interface minimalista e responsiva.
+-   Paleta premium (preto, cinza, dourado).
+-   Stepper de agendamento (Serviço → Profissional → Data → Horário →
+    Confirmação).
+-   Painel do barbeiro com calendário semanal.
+
+------------------------------------------------------------------------
+
+10. Métricas de Sucesso
+
+-   Nº de barbeiros cadastrados.
+-   Nº de clientes cadastrados.
+-   Nº de agendamentos realizados.
+-   % de uso da opção “Qualquer profissional”.
+-   Taxa de cancelamento de agendamentos.
+
+------------------------------------------------------------------------
+
+11. Critérios de Aceite (User Stories)
+
+-   US-CLI-01: Cliente pode escolher profissional.
+-   US-CLI-02: Cliente só vê horários livres do barbeiro escolhido.
+-   US-CLI-03: Cliente pode escolher “Qualquer profissional” para pegar
+    o primeiro slot livre.
+-   US-PRO-01: Barbeiro pode configurar serviços que executa.
+-   US-PRO-02: Barbeiro pode definir agenda de trabalho e pausas.
+-   US-PRO-03: Admin pode visualizar a agenda de todos os barbeiros.
+
+------------------------------------------------------------------------
+
+12. Riscos e Restrições
+
+-   Baixa adesão inicial de barbeiros acostumados a agenda física.
+-   MVP sem pagamentos pode limitar receita imediata.
+-   Escalabilidade limitada se houver muitos agendamentos simultâneos.
+
+------------------------------------------------------------------------
+
+📌 Resumo Final:
+O MVP será um aplicativo web responsivo, com login para clientes e
+barbeiros, catálogo de serviços, agendamento online com escolha de
+barbeiro, e painel de gestão de compromissos. Notificações por e-mail
+garantem comunicação básica. Esse escopo entrega a função essencial do
+produto, validando o mercado antes de expandir para pagamentos e
+features avançadas.
