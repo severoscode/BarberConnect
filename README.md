@@ -8,14 +8,14 @@ This project is a comprehensive system for managing professional services appoin
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [License](#license)
-- 
+
 ## Features
 - **User Authentication**: Implements user authentication using OpenID.
 - **Service Management**: Create, read, update, and delete services.
 - **Professional Management**: Manage professionals along with their services and schedules.
 - **Appointment Management**: Clients can book, modify, and cancel appointments.
 - **Break Scheduled Management**: Takes into account breaks in professional schedules.
-- 
+
 ## Technologies Used
 - **TypeScript**: For type-safe JavaScript development.
 - **Drizzle ORM**: For database interaction using PostgreSQL.
